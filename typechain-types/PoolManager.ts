@@ -22,8 +22,8 @@ export interface PoolManagerInterface extends utils.Interface {
   functions: {
     "addDetermination(address)": FunctionFragment;
     "approvePool()": FunctionFragment;
-    "calcTokenToBurn(uint256)": FunctionFragment;
     "determinationContractAddress()": FunctionFragment;
+    "determinePivot(bytes32,address)": FunctionFragment;
     "disapprovePool()": FunctionFragment;
     "getSubgraphTimeseriesDataPoint(address,uint256)": FunctionFragment;
     "initializePoolTokens(address,uint256)": FunctionFragment;
@@ -31,7 +31,6 @@ export interface PoolManagerInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "percent(uint256,uint256,uint256)": FunctionFragment;
     "poolApproved()": FunctionFragment;
-    "poolInteraction(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "reserveContractAddress()": FunctionFragment;
     "setReserveContractAddress(address)": FunctionFragment;
@@ -54,12 +53,12 @@ export interface PoolManagerInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "calcTokenToBurn",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "determinationContractAddress",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "determinePivot",
+    values: [BytesLike, string]
   ): string;
   encodeFunctionData(
     functionFragment: "disapprovePool",
@@ -85,10 +84,6 @@ export interface PoolManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "poolApproved",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "poolInteraction",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -141,11 +136,11 @@ export interface PoolManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "calcTokenToBurn",
+    functionFragment: "determinationContractAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "determinationContractAddress",
+    functionFragment: "determinePivot",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -168,10 +163,6 @@ export interface PoolManagerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "percent", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "poolApproved",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "poolInteraction",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -220,13 +211,13 @@ export interface PoolManagerInterface extends utils.Interface {
     "ApprovalChanged(bool)": EventFragment;
     "EpToken(address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "TokenCount(uint256)": EventFragment;
+    "TA(uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ApprovalChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "EpToken"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TokenCount"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "TA"): EventFragment;
 }
 
 export type ApprovalChangedEvent = TypedEvent<
@@ -248,9 +239,9 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
-export type TokenCountEvent = TypedEvent<[BigNumber], { tokens: BigNumber }>;
+export type TAEvent = TypedEvent<[BigNumber], { amt: BigNumber }>;
 
-export type TokenCountEventFilter = TypedEventFilter<TokenCountEvent>;
+export type TAEventFilter = TypedEventFilter<TAEvent>;
 
 export interface PoolManager extends BaseContract {
   contractName: "PoolManager";
@@ -289,12 +280,13 @@ export interface PoolManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    calcTokenToBurn(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     determinationContractAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    determinePivot(
+      pivotTargetPoolId: BytesLike,
+      subgraphContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     disapprovePool(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -328,11 +320,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<[BigNumber] & { quotient: BigNumber }>;
 
     poolApproved(overrides?: CallOverrides): Promise<[boolean]>;
-
-    poolInteraction(
-      tokenAmt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -393,12 +380,13 @@ export interface PoolManager extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  calcTokenToBurn(
-    amount: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   determinationContractAddress(overrides?: CallOverrides): Promise<string>;
+
+  determinePivot(
+    pivotTargetPoolId: BytesLike,
+    subgraphContract: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   disapprovePool(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -432,11 +420,6 @@ export interface PoolManager extends BaseContract {
   ): Promise<BigNumber>;
 
   poolApproved(overrides?: CallOverrides): Promise<boolean>;
-
-  poolInteraction(
-    tokenAmt: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -492,12 +475,13 @@ export interface PoolManager extends BaseContract {
 
     approvePool(overrides?: CallOverrides): Promise<void>;
 
-    calcTokenToBurn(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     determinationContractAddress(overrides?: CallOverrides): Promise<string>;
+
+    determinePivot(
+      pivotTargetPoolId: BytesLike,
+      subgraphContract: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     disapprovePool(overrides?: CallOverrides): Promise<void>;
 
@@ -529,11 +513,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<BigNumber>;
 
     poolApproved(overrides?: CallOverrides): Promise<boolean>;
-
-    poolInteraction(
-      tokenAmt: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -591,8 +570,8 @@ export interface PoolManager extends BaseContract {
       newOwner?: string | null
     ): OwnershipTransferredEventFilter;
 
-    "TokenCount(uint256)"(tokens?: null): TokenCountEventFilter;
-    TokenCount(tokens?: null): TokenCountEventFilter;
+    "TA(uint256)"(amt?: null): TAEventFilter;
+    TA(amt?: null): TAEventFilter;
   };
 
   estimateGas: {
@@ -605,12 +584,13 @@ export interface PoolManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    calcTokenToBurn(
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     determinationContractAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    determinePivot(
+      pivotTargetPoolId: BytesLike,
+      subgraphContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     disapprovePool(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -644,11 +624,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<BigNumber>;
 
     poolApproved(overrides?: CallOverrides): Promise<BigNumber>;
-
-    poolInteraction(
-      tokenAmt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -707,13 +682,14 @@ export interface PoolManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    calcTokenToBurn(
-      amount: BigNumberish,
+    determinationContractAddress(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    determinationContractAddress(
-      overrides?: CallOverrides
+    determinePivot(
+      pivotTargetPoolId: BytesLike,
+      subgraphContract: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     disapprovePool(
@@ -748,11 +724,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     poolApproved(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    poolInteraction(
-      tokenAmt: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }

@@ -4,6 +4,7 @@
 import {
   BaseContract,
   BigNumber,
+  BigNumberish,
   BytesLike,
   CallOverrides,
   ContractTransaction,
@@ -19,35 +20,77 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 export interface SubgraphManagerInterface extends utils.Interface {
   contractName: "SubgraphManager";
   functions: {
-    "approvedSubgraphs(address)": FunctionFragment;
-    "disableSubgraph(address)": FunctionFragment;
+    "approveSubgraph()": FunctionFragment;
+    "currentPositionBalance(address)": FunctionFragment;
+    "deposit(uint256)": FunctionFragment;
+    "disapproveSubgraph()": FunctionFragment;
+    "emergencyFundWithdraw(address)": FunctionFragment;
+    "getDepositAddressByPoolId(bytes32)": FunctionFragment;
     "owner()": FunctionFragment;
+    "poolToDepositAmounts(address)": FunctionFragment;
+    "poolToDepositHoldingRegistry(address)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "retrieveSubgraphStatus(address)": FunctionFragment;
-    "subgraphUpdatedTimestamp(address)": FunctionFragment;
+    "setSubgraphQueryURI(bytes32)": FunctionFragment;
+    "subgraphApproved()": FunctionFragment;
+    "subgraphQueryURI()": FunctionFragment;
+    "targetVerifier(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
-    "updateSubgraphStatus(address,bool)": FunctionFragment;
+    "updateroyaltyUser(address)": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
+    "withdrawToPoolAddress(address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "approvedSubgraphs",
+    functionFragment: "approveSubgraph",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "currentPositionBalance",
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "disableSubgraph",
+    functionFragment: "deposit",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "disapproveSubgraph",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "emergencyFundWithdraw",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getDepositAddressByPoolId",
+    values: [BytesLike]
+  ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "poolToDepositAmounts",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "poolToDepositHoldingRegistry",
+    values: [string]
+  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "retrieveSubgraphStatus",
-    values: [string]
+    functionFragment: "setSubgraphQueryURI",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "subgraphUpdatedTimestamp",
+    functionFragment: "subgraphApproved",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "subgraphQueryURI",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "targetVerifier",
     values: [string]
   ): string;
   encodeFunctionData(
@@ -55,29 +98,66 @@ export interface SubgraphManagerInterface extends utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "updateSubgraphStatus",
-    values: [string, boolean]
+    functionFragment: "updateroyaltyUser",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdraw",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawToPoolAddress",
+    values: [string]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "approvedSubgraphs",
+    functionFragment: "approveSubgraph",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "disableSubgraph",
+    functionFragment: "currentPositionBalance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "disapproveSubgraph",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "emergencyFundWithdraw",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getDepositAddressByPoolId",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "poolToDepositAmounts",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "poolToDepositHoldingRegistry",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "retrieveSubgraphStatus",
+    functionFragment: "setSubgraphQueryURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "subgraphUpdatedTimestamp",
+    functionFragment: "subgraphApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "subgraphQueryURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "targetVerifier",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -85,7 +165,12 @@ export interface SubgraphManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "updateSubgraphStatus",
+    functionFragment: "updateroyaltyUser",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawToPoolAddress",
     data: BytesLike
   ): Result;
 
@@ -141,111 +226,224 @@ export interface SubgraphManager extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    approvedSubgraphs(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    approveSubgraph(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    disableSubgraph(
-      subgraphContract: string,
+    currentPositionBalance(
+      pool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    deposit(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    disapproveSubgraph(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    emergencyFundWithdraw(
+      pool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    getDepositAddressByPoolId(
+      pivotTargetPoolId: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    poolToDepositAmounts(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    poolToDepositHoldingRegistry(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    retrieveSubgraphStatus(
-      subgraphContract: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    setSubgraphQueryURI(
+      URI: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    subgraphUpdatedTimestamp(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    subgraphApproved(overrides?: CallOverrides): Promise<[boolean]>;
+
+    subgraphQueryURI(overrides?: CallOverrides): Promise<[string]>;
+
+    targetVerifier(
+      targetAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     transferOwnership(
       newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    updateSubgraphStatus(
-      subgraphContract: string,
-      approved: boolean,
+    updateroyaltyUser(
+      user: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    withdrawToPoolAddress(
+      destinationAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  approvedSubgraphs(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  approveSubgraph(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  disableSubgraph(
-    subgraphContract: string,
+  currentPositionBalance(
+    pool: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  deposit(
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  disapproveSubgraph(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  emergencyFundWithdraw(
+    pool: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  getDepositAddressByPoolId(
+    pivotTargetPoolId: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  poolToDepositAmounts(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  poolToDepositHoldingRegistry(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  retrieveSubgraphStatus(
-    subgraphContract: string,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  setSubgraphQueryURI(
+    URI: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  subgraphUpdatedTimestamp(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  subgraphApproved(overrides?: CallOverrides): Promise<boolean>;
+
+  subgraphQueryURI(overrides?: CallOverrides): Promise<string>;
+
+  targetVerifier(
+    targetAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   transferOwnership(
     newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  updateSubgraphStatus(
-    subgraphContract: string,
-    approved: boolean,
+  updateroyaltyUser(
+    user: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  withdraw(
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawToPoolAddress(
+    destinationAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    approvedSubgraphs(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    approveSubgraph(overrides?: CallOverrides): Promise<void>;
 
-    disableSubgraph(
-      subgraphContract: string,
+    currentPositionBalance(
+      pool: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
+    deposit(amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+
+    disapproveSubgraph(overrides?: CallOverrides): Promise<void>;
+
+    emergencyFundWithdraw(
+      pool: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getDepositAddressByPoolId(
+      pivotTargetPoolId: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
     owner(overrides?: CallOverrides): Promise<string>;
 
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    retrieveSubgraphStatus(
-      subgraphContract: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    subgraphUpdatedTimestamp(
+    poolToDepositAmounts(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    poolToDepositHoldingRegistry(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setSubgraphQueryURI(
+      URI: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    subgraphApproved(overrides?: CallOverrides): Promise<boolean>;
+
+    subgraphQueryURI(overrides?: CallOverrides): Promise<string>;
+
+    targetVerifier(
+      targetAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     transferOwnership(
       newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    updateSubgraphStatus(
-      subgraphContract: string,
-      approved: boolean,
+    updateroyaltyUser(user: string, overrides?: CallOverrides): Promise<void>;
+
+    withdraw(amount: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
+
+    withdrawToPoolAddress(
+      destinationAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -265,30 +463,62 @@ export interface SubgraphManager extends BaseContract {
   };
 
   estimateGas: {
-    approvedSubgraphs(
-      arg0: string,
-      overrides?: CallOverrides
+    approveSubgraph(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    disableSubgraph(
-      subgraphContract: string,
+    currentPositionBalance(
+      pool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    deposit(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    disapproveSubgraph(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    emergencyFundWithdraw(
+      pool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    getDepositAddressByPoolId(
+      pivotTargetPoolId: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    poolToDepositAmounts(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    poolToDepositHoldingRegistry(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    retrieveSubgraphStatus(
-      subgraphContract: string,
-      overrides?: CallOverrides
+    setSubgraphQueryURI(
+      URI: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    subgraphUpdatedTimestamp(
-      arg0: string,
-      overrides?: CallOverrides
+    subgraphApproved(overrides?: CallOverrides): Promise<BigNumber>;
+
+    subgraphQueryURI(overrides?: CallOverrides): Promise<BigNumber>;
+
+    targetVerifier(
+      targetAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     transferOwnership(
@@ -296,38 +526,79 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    updateSubgraphStatus(
-      subgraphContract: string,
-      approved: boolean,
+    updateroyaltyUser(
+      user: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    withdrawToPoolAddress(
+      destinationAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    approvedSubgraphs(
-      arg0: string,
-      overrides?: CallOverrides
+    approveSubgraph(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    disableSubgraph(
-      subgraphContract: string,
+    currentPositionBalance(
+      pool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    deposit(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    disapproveSubgraph(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    emergencyFundWithdraw(
+      pool: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getDepositAddressByPoolId(
+      pivotTargetPoolId: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    poolToDepositAmounts(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    poolToDepositHoldingRegistry(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    retrieveSubgraphStatus(
-      subgraphContract: string,
-      overrides?: CallOverrides
+    setSubgraphQueryURI(
+      URI: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    subgraphUpdatedTimestamp(
-      arg0: string,
-      overrides?: CallOverrides
+    subgraphApproved(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    subgraphQueryURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    targetVerifier(
+      targetAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     transferOwnership(
@@ -335,9 +606,18 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    updateSubgraphStatus(
-      subgraphContract: string,
-      approved: boolean,
+    updateroyaltyUser(
+      user: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdraw(
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawToPoolAddress(
+      destinationAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -24,7 +24,17 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
     bool public poolApproved = true;
 
-    address currentDepositLocation = address(this);
+    //currentDepositHoldingAddress is the address where the ERC20 token deposits from this pool are currently held (ie the Compound market that is holding this pools funds)
+    address currentDepositHoldingAddress = address(this);
+
+    //Address of the subgraph contract that pertains to the protocol currently holding pool deposits
+    address currentTargetSubgraphAddress = address(0);
+
+    uint deposited = 0;
+
+    //The user that most recently successfully pivoted the pool funds 
+    //Should be initialized upon the first deposit
+    address bonusUser = address(0);
 
     address depositTokenAddress;
 
@@ -63,6 +73,7 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         pTokenAddress = address(pTokenContract);
         pTokenContract.mint(senderAddress, 10000000000000);
         userToDeposits[senderAddress] = initialDepositAmount;
+        deposited = initialDepositAmount;
     }
 
     function setReserveContractAddress(address contractAddress) external onlyOwner {
@@ -84,11 +95,46 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         latestSubgraphTimeseries[subgraphContractAddress][index] = dataPoint;
     }
 
+    function determinePivot(bytes32 pivotTargetPoolId, address subgraphContract) public returns (bool pivotExecuted) {
+        //pivotTargetPoolId is the specific deposit target address
+
+        bool executePivot = false;
+        //**********************************************************************************************
+        //THIS LOGIC WILL VARY IN PRODUCTION DEPENDING ON HOW DECO WORKS
+        //Should be optimized for calculating factors on top of base yield such as impermanent loss, slippage, arbitrage etc 
+        
+        //Instantiate subgraphContract and confirm subgraphContract.subgraphApproved and set to targetSubgraphApproved
+        bool targetSubgraphApproved = true;
+
+        //Make call to query on subgraphContract for TVL ts on the pool, see if currently meets depositable threshhold and that there has not been a significant outflow of funds recently
+
+        //**TESTING************************************************************
+        //uint currentPositionBalance = subgraphContract.currentPositionBalance(address(this))
+        uint currentPositionBalance = userToDeposits[msg.sender];
+        //*********************************************************************
+            
+        if (currentDepositHoldingAddress != address(this)) {
+            //Make call to currentTargetSubgraphAddress for latest ts data points, hold data in a variable
+            //Make call to subgraphContract, hold data in a variable
+            //Pass the data from these two subgraphs to the determinationContract.calculatePivot() function, returning to boolean executePivot
+
+
+            bool withdrawCompleted = pivotWithdraw(currentPositionBalance);
+            require(withdrawCompleted == true, "Withdraw funds unsuccessful");
+        }
+
+        bool depositComplete = pivotDeposit(currentPositionBalance, pivotTargetPoolId, subgraphContract);
+        require(depositComplete == true, "Pivot deposit failed");
+        bonusUser = msg.sender;
+
+        
+    }
+
     function addDetermination(address determinationContract) external {
         require(determinationContractAddress == address(0), "This pool has already set a determination contract. A new pool must be created to implement a different contract");
         //This function gets called by the user creating the pool to add a custom contract that establishes conditions for the pool to pivot deposits into another protocol
         
-        //If currentDeposited == address(0) execute pivot to target address
+        //If currentDepositHoldingAddress == address(0) execute pivot to target address
 
         //For now, once a pool establishes a determinationContract, it cannot be changed. A new pool must be created
         
@@ -102,14 +148,19 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         determinationContractAddress = determinationContract;
     }
 
-    function pivotDeposit(address depositTarget, uint amount) internal {
+    function pivotDeposit(uint amount, bytes32 pivotTargetPoolId, address depositTargetSubgraphAddress) internal returns (bool depositSuccess) {
         //When a determination is made to pivot funds into a different protocol/pool, this function executes the deposit
         //This function can only be called internally after determining pivot conditions have been met
+
+        
+        address targetDepositHoldingAddress = address(0);
+        //Fetch targetDepositHoldingAddress for target pool from subgraphContract.getDepositAddressByPoolId(pivotTargetPoolId) 
+
 
         //calls targetVerifier() function on the subgraph contract to verify that the deposit target address actually pertains to the protocol
             //This function accepts the targetAddress input
             //reads from the "PARENT_ADDRESS" immutable variable, applies an interface with the verifier call
-            //Checks from whatever output that the depositTarget is confirmed to pertain to the protocol
+            //Checks from whatever output that the depositTargetSubgraphAddress is confirmed to pertain to the protocol
             //returns bool
 
             //Burden is on DAO members to confirm the parent address is legit and the verifier call really does confirm a deposit pool (rather than outputting user addresses)
@@ -117,18 +168,50 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
 
         //approves the transfer for the subgraph contract
-        //Calls the "deposit" function on the subgraph contract
 
+        //Calls the "deposit" function on the subgraph contract, sending the funds from this contract to the targetDepositHoldingAddress
+        //****TESTING********************************************************************************************************
+        //"deposit()" on subgraph contract will return bool 
+        bool depositExecuted = true;
+        //*************************************************************************************************************
+
+        require(depositExecuted == true, "Pivot deposit failed");
+        deposited = amount;
+        currentTargetSubgraphAddress = depositTargetSubgraphAddress;
+        currentDepositHoldingAddress = targetDepositHoldingAddress;
+
+        return true;
     }
 
-    function pivotWithdraw(uint amount) internal {
+    function pivotWithdraw(uint amount) internal returns (bool withdrawSuccess) {
         //When a determination is made to pivot funds into a different protocol/pool, this function executes the withdraw
         //This function can only be called internally after determining pivot conditions have been met, before a deposit is made
 
-        //read the currentDeposited global address and passes this to the withdraw funciton
-        //Call the "withdraw" function on the subgraph, sending the funds back to this contract
-        //set currentDeposited to address(this)
+        //read the currentDepositHoldingAddress global address and passes this to the withdraw funciton
 
+        //Call the "withdraw()" function on the subgraph, sending the funds back to this contract
+        //****TESTING********************************************************************************************************
+        //"withdraw()" on subgraph contract will return bool 
+        bool withdrawExecuted = true;
+        //*************************************************************************************************************
+
+        require(withdrawExecuted == true, "Pivot withdraw failed");
+
+        uint profit = amount - deposited;
+
+        //10% of pivot profits go to bonus user
+        uint bonusAmount = (profit*10)/100;
+
+        IERC20(depositTokenAddress).transfer(bonusUser, bonusAmount);
+
+        deposited = amount - profit;
+
+        //Make call to "currentTargetSubgraphAddress()" contract (BEFORE UPDATING) to get the royaltyUser
+        //Take owed amount to royaltyUser before passing depositing funds to next target
+
+        currentTargetSubgraphAddress = address(0);
+        currentDepositHoldingAddress = address(this);
+        return true;
     }
 
     function userDeposit(uint amount) public {
@@ -138,8 +221,9 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
         //add amount to userToDeposits[sender]
         userToDeposits[msg.sender] += amount;
+        deposited += amount;
 
-        //Instantiate Subgraph contract based on 'currentDeposited' address
+        //Instantiate Subgraph contract based on 'currentDepositHoldingAddress' address
 
         //get current amount of deposit tokens in deposit position
         //REPLACE WITH CALL TO SUBGRAPH CONTRACT .currentPositionBalance()
@@ -156,22 +240,22 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 		PoolToken pTokenContract = PoolToken(pTokenAddress);
         pTokenContract.mint(msg.sender, pTokensToMint);
 
-        //calls pivotDeposit() with the currentDeposited address, adding this users funds to the pool
-
+        
     }
 
 	//******************************************************************************************************************************************
 	//TESTING, THIS FUNCTION SIMULATES POOL FEES COLLECTED, OTHER USERS DEPOSITING INTO POOL etc
-	uint simulatedPositionBalance = 3000000000000000000000;
+	uint simulatedPositionBalance = 0;
 	event EpToken(address pToken);
+    event TA(uint amt);
 	function simulatePoolActivity() public {
-
 		//****************************************************
 		//SIMULATE DEPOSIT
-		uint amount = 1000000000000000000000;
-		userToDeposits[0x30CF84E121F2105e638746dCcCffebCE65B18F7C] += amount;
+		//uint amount = 1000000000000000000000;
+		//userToDeposits[0x30CF84E121F2105e638746dCcCffebCE65B18F7C] += amount;
+        //deposited += amount;
 
-        uint ratio = percent(amount, 1000000000000000000000, 4);
+        uint ratio = percent(deposited, deposited, 4);
 
         //mint ptokens to user based on proportion of (amount)/(total # of tokens in position) = (ptokens to mint)/(ptoken.totalSupply())
 		uint pTokensToMint = (ratio * IERC20(pTokenAddress).totalSupply()) / (10000);
@@ -179,30 +263,11 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         pTokenContract.mint(0x30CF84E121F2105e638746dCcCffebCE65B18F7C, pTokensToMint);
 
 		//mint test (deposit) tokens to this pool manager, 1000...0000 for thi fake deposit, 1000...0000 for the fake interest gained
-		TestToken(depositTokenAddress).mint(address(this), 2000000000000000000000);
-
+		TestToken(depositTokenAddress).mint(address(this), deposited);
+        deposited = deposited*2;
+        simulatedPositionBalance = deposited * 3;
 		emit EpToken(pTokenAddress);
 		//****************************************************
-
-	}
-
-	event TokenCount(uint tokens);
-	function calcTokenToBurn(uint amount) public view returns (uint) {
-        uint currentPositionBalance = simulatedPositionBalance;
-		//*********************************************************************
-
-		//need to figure out how many pTokens to burn
-        //Get proportion of senders pToken amount to withdraw to pToken total supply
-	    uint ratio = percent(amount, currentPositionBalance, 13);
-        //Use sender pToken ratio to get a proportion of deposit tokens to tokens in position
-        //get number of tokens to withdraw for user based on proportion of (amount)/(total # of tokens in position) = (ptokens to mint)/(ptoken.totalSupply())
-		uint pTokensToBurn = (ratio * IERC20(pTokenAddress).totalSupply()) / (10000000000000);
-		uint digitToRound = pTokensToBurn - ((pTokensToBurn/10) * 10);
-		if (digitToRound >= 5) {
-			pTokensToBurn += 1;
-		}
-
-		return pTokensToBurn;
 
 	}
 
@@ -213,15 +278,28 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         //Allows user to withdraw their deposits from the pool
 		//Amount is denominated in deposit token
 
-        //read the currentDeposited global address
+        //read the currentDepositHoldingAddress global address
 		//get current amount of deposit tokens in deposit position
-        //REPLACE WITH CALL TO SUBGRAPH CONTRACT .currentPositionBalance()
+        //REPLACE WITH CALL TO currentTargetSubgraphAddress .currentPositionBalance()
         //uint currentPositionBalance = subgraphContract.currentPositionBalance()()
         //**TESTING************************************************************
 		
         uint currentPositionBalance = simulatedPositionBalance;
 		simulatedPositionBalance -= amount;
 		//*********************************************************************
+
+        uint profit = currentPositionBalance - deposited;
+
+
+        if (profit > 0) {
+            uint bonusAmount = (profit*10)/100;
+
+            //call the subgraph withdraw function to the bonusUser for bonusAmount
+
+            currentPositionBalance -= bonusAmount; 
+        }
+
+        require(currentPositionBalance > 0, "Position has no assets");
 
 		//need to figure out how many pTokens to burn
         //Get proportion of senders pToken amount to withdraw to pToken total supply
@@ -235,11 +313,11 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 			pTokensToBurn += 1;
 		}
 
+        emit TA(deposited);
 
-		//require(pTokensToBurn <= senderBalancePToken, "Withdraw amount greater than principal + interest owed to sender");
+		require(pTokensToBurn <= senderBalancePToken, "Withdraw amount greater than principal + interest owed to sender");
 
-        //call the subgraph withdraw function passing the currentDeposited address and the amount of deposit tokens to withdraw
-		//pivotWithdraw()
+        //call the subgraph withdraw function passing the currentDepositHoldingAddress address and the amount of deposit tokens to withdraw
         //funds are received by the pool (amount)
 
         //Subtract amount from userToDeposits[msg.sender]
@@ -255,6 +333,8 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
             //if userToDeposits[msg.sender] >= amount, set userToDeposits[msg.sender] -= amount, levy no fees
 			userToDeposits[msg.sender] -= amount;
 		}
+
+        deposited = currentPositionBalance - amount;
 		
 		uint protocolFee = (feesToLevy / 10000) * protocolFeePercentage;
 		uint amountToUser = amount - protocolFee;
@@ -268,10 +348,12 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
         //burn ptokens
 		PoolToken pTokenContract = PoolToken(pTokenAddress);
-        pTokenContract.burnFrom(msg.sender, pTokensToBurn);
+
+        if (pTokensToBurn <= senderBalancePToken) {
+            pTokenContract.burnFrom(msg.sender, pTokensToBurn);
+        }
 
     }
-
 
 	function applyProtocolFees(uint protocolFee) internal {
         //PROTOCOL FEES ARE TO BE CALCULATED AND SENT WHEN A USER BURNS THEIR pTokens.
@@ -283,36 +365,6 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         ProtocolReserveManager protocolReserve = ProtocolReserveManager(reserveContractAddress);
         protocolReserve.collectProtocolRevenue(address(this), depositTokenAddress, protocolFee);
     }
-
-	//********************************************************************************************************************************************
-    //DEPRECATED FUNCTION
-
-    function poolInteraction(uint tokenAmt) public {
-
-        //PROTOCOL FEES ARE TO BE CALCULATED AND SENT WHEN A USER BURNS THEIR pTokens.
-        //CALCULATED BASED ON PERCENTAGE OF DIFFERENCE FROM CURRENT POSITION VALUE IN DEPOSIT TOKENS - TOKENS DEPOSITED
-
-        
-        //FILLER FOR SOME SORT OF LOGIC ON THE POOL THAT TRIGGERS A COLLECTION OF PROTOCOL FEES
-        //Logic that withdraws the tokens appropriate amount of tokens that were earned as interest from whatever protocol the pool is Currently deposited in 
-        //For testing purposes the pool already has the revenue token in its possession
-
-        //For testing, using a specially deployed token. In practice this token would be USDC, DAI, etc or whatever the protocol holding the pool deposits pays out
-        address revenueTokenAddress = depositTokenAddress;
-
-        //collectionTokenAmount should be a value pulled directly from the contract, the precalculated value of the revenues to be sent to the protocol level
-        //should have checks in place to make sure the collectionTokenAmount is the appropriate amount so as not to send the entireity of the pools tokens to the protocol
-        uint collectionTokenAmount = tokenAmt;
-
-        //Pool shall approve the reserve to spend/transact with the revenueToken the collectionTokenAmount
-        IERC20(revenueTokenAddress).approve(reserveContractAddress, collectionTokenAmount);
-
-        //now convert and send protocol level revenues to reserve
-        ProtocolReserveManager protocolReserve = ProtocolReserveManager(reserveContractAddress);
-        protocolReserve.collectProtocolRevenue(address(this), revenueTokenAddress, collectionTokenAmount);
-    }
-//********************************************************************************************************************************************
-
 
     function approvePool() public onlyOwner {
         // function to be called after voting to re-approve a pool

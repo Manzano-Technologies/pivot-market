@@ -60,7 +60,7 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     console.log("TEST TOKEN BALANCES: ", (await testToken.totalSupply()).toString(), " (SUPPLY) //////// ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
     await pTokenContract.approve(poolContractAddress, BigInt(1000000000000000000000))
     const poolInteraction1 = await poolContract.userWithdraw(BigInt(1000000000000000000000));
-    await poolInteraction1.wait()
+    const pi1 = await poolInteraction1.wait()
     console.log("TEST TOKEN BALANCES: ", (await testToken.totalSupply()).toString(), " (SUPPLY) //////// ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
 
     console.log("0x4339F9D3B368e71bDa5aede52FCf5e8F9DC6C605 - pToken.totalSupply() after withdraw 1", (await pTokenContract.totalSupply()).toString(), (await pTokenContract.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
@@ -68,29 +68,22 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     await pTokenContract.approve(poolContractAddress, BigInt(250000000000000000000))
 
     const poolInteraction2 = await poolContract.userWithdraw(BigInt(250000000000000000000));
-    await poolInteraction2.wait()
+    const pi2 = await poolInteraction2.wait()
     console.log("TEST TOKEN BALANCES: ", (await testToken.totalSupply()).toString(), " (SUPPLY) //////// ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
 
     console.log("0x4339F9D3B368e71bDa5aede52FCf5e8F9DC6C605 - pToken.totalSupply() after withdraw 2", (await pTokenContract.totalSupply()).toString(), (await pTokenContract.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
-
-    const tokens = await poolContract.calcTokenToBurn(BigInt(250000000000000000000))
-    console.log('TOKENS TO BURN::: ', tokens.toString())
-
-    // const poolInteraction2 = await poolContract.userWithdraw(200);
-    // await poolInteraction2.wait()
-
     const val = new BigNumber("1000000000000000000000000")
     console.log(val.toFixed(), "GOV TOKEN BALANCES: ", (await governanceToken.balanceOf(reserveContractAddress)).toString(), (await governanceToken.balanceOf(poolContractAddress)).toString(), (await governanceToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await governanceToken.balanceOf("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")).toString())
-    const govTokTrans = await governanceToken.transfer("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", val.toFixed())
+    // const govTokTrans = await governanceToken.transfer("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", val.toFixed())
 
     console.log("GOV TOKEN BALANCES: ", (await governanceToken.balanceOf(reserveContractAddress)).toString(), (await governanceToken.balanceOf(poolContractAddress)).toString(), (await governanceToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await governanceToken.balanceOf("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")).toString())
     await pTokenContract.approve(poolContractAddress, BigInt(250000000000000000000))
 
     const poolInteraction3 = await poolContract.userWithdraw(BigInt(250000000000000000000));
-    await poolInteraction3.wait()
+    const pi3 = await poolInteraction3.wait()
 
-    // const poolInteraction3 = await poolContract.userWithdraw(400);
-    // await poolInteraction3.wait()
+    console.log('CHECK EVENTS DATA', pi3.events[0].args[0].toString(), pi2.events[0].args[0].toString(), pi1.events[0].args[0].toString(), 'OSU', (await pTokenContract.totalSupply()).toString(), (await pTokenContract.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await pTokenContract.balanceOf(poolContractAddress)).toString())
+
     console.log("TEST TOKEN BALANCES: ", (await testToken.totalSupply()).toString(), " (SUPPLY) //////// ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
 
     await reserveContract.acctProtocolRevenueCalculation("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")
@@ -101,7 +94,6 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
 
     console.log("RESERVE FACTOR 0,1,2,3: ", (await reserveContract.cummulativeReserveFactor(0)).toString(), (await reserveContract.cummulativeReserveFactor(1)).toString(), (await reserveContract.cummulativeReserveFactor(2)).toString(), (await reserveContract.cummulativeReserveFactor(3)).toString())
 
-    // await reserveContract.withdrawRevenues(300, testTokenAddress)
     console.log("REVENUE AVAILABLE FOR 0x...2266: ", (await reserveContract.revenueAvailableByUser("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
     console.log("TEST TOKEN BALANCES: ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
 
@@ -134,12 +126,13 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     // the Proposal State is an enum data type, defined in the IGovernor contract.
     // 0:Pending, 1:Active, 2:Canceled, 3:Defeated, 4:Succeeded, 5:Queued, 6:Expired, 7:Executed
     console.log(`Current Proposal State: ${proposalState}`)
+    console.log(await poolContract.poolApproved())
 
 
     //begin voting sequence
 
     //Voting from signer account
-    const voteTx = await governorContract.castVoteWithReason(proposalId, 1, "SDds")
+    const voteTx = await governorContract.castVoteWithReason(proposalId, 1, "MY REASON")
     const voteTxReceipt = await voteTx.wait(1)
     console.log(voteTxReceipt.events[0].args.reason)
     const proposalState2 = await governorContract.state(proposalId)
@@ -179,17 +172,5 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     console.log(await poolContract.poolApproved())
 
 }
-function storeProposalId(proposalId: any) {
-    const chainId = network.config.chainId!.toString();
-    let proposals: any;
 
-    if (fs.existsSync("proposals.json")) {
-        proposals = JSON.parse(fs.readFileSync("proposals.json", "utf8"));
-    } else {
-        proposals = {};
-        proposals[chainId] = [];
-    }
-    proposals[chainId].push(proposalId.toString());
-    fs.writeFileSync("proposals.json", JSON.stringify(proposals), "utf8");
-}
 export default deployTestPoolContract;
