@@ -30,11 +30,11 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
     //Address of the subgraph contract that pertains to the protocol currently holding pool deposits
     address currentTargetSubgraphAddress = address(0);
 
-    uint deposited = 0;
+    uint public deposited = 0;
 
     //The user that most recently successfully pivoted the pool funds 
     //Should be initialized upon the first deposit
-    address bonusUser = address(0);
+    address bonusUser;
 
     address depositTokenAddress;
 
@@ -47,6 +47,8 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
 	//Ex 100% would be 10000
 	uint protocolFeePercentage = 1000;
+    uint bonusPercentage = 1000;
+
     
     bytes32 public title;
 
@@ -59,6 +61,7 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         title = titleString;
         reserveContractAddress = reserveContractAddressInput;
         depositTokenAddress = depositToken;
+        bonusUser = address(0x30CF84E121F2105e638746dCcCffebCE65B18F7C);
         //function call in reserve contract must receive address of this pool contract before transfering tokens
     }
 
@@ -187,6 +190,8 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         //When a determination is made to pivot funds into a different protocol/pool, this function executes the withdraw
         //This function can only be called internally after determining pivot conditions have been met, before a deposit is made
 
+        //require(currentDepositHoldingAddress != address(this), "Cannot pivot withdraw when funds are already in the pool contract.");
+
         //read the currentDepositHoldingAddress global address and passes this to the withdraw funciton
 
         //Call the "withdraw()" function on the subgraph, sending the funds back to this contract
@@ -195,16 +200,35 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         bool withdrawExecuted = true;
         //*************************************************************************************************************
 
+		//Fees Applied
+		uint applicableProfit = 0;
+		if (amount > userToDeposits[msg.sender]) {
+            //if amount > userToDeposits[msg.sender], set userToDeposits[msg.sender] to 0 and levy fees on the value of amount - userToDeposits[msg.sender]
+			applicableProfit = amount - userToDeposits[msg.sender];
+			userToDeposits[msg.sender] = 0;
+		} else {
+            //if userToDeposits[msg.sender] >= amount, set userToDeposits[msg.sender] -= amount, levy no fees
+			userToDeposits[msg.sender] -= amount;
+		}
+
+		uint protocolFee = (applicableProfit / 10000) * protocolFeePercentage;
+        uint bonusPayout = (applicableProfit / 10000) * bonusPercentage;
+        uint payouts = protocolFee + bonusPayout;
+		require(amount > payouts, "Withdraw value too high after accounting for fees");
+
+        uint amountToUser = amount - protocolFee;
+		if (protocolFee > 0) {
+			applyProtocolFees(protocolFee);
+		}
+        
+        amountToUser -= bonusPayout;
+        if (bonusPayout > 0) {
+            applyBonusPayout(bonusPayout);
+        }
+
         require(withdrawExecuted == true, "Pivot withdraw failed");
 
-        uint profit = amount - deposited;
-
-        //10% of pivot profits go to bonus user
-        uint bonusAmount = (profit*10)/100;
-
-        IERC20(depositTokenAddress).transfer(bonusUser, bonusAmount);
-
-        deposited = amount - profit;
+        deposited = amount;
 
         //Make call to "currentTargetSubgraphAddress()" contract (BEFORE UPDATING) to get the royaltyUser
         //Take owed amount to royaltyUser before passing depositing funds to next target
@@ -217,7 +241,7 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
     function userDeposit(uint amount) public {
         //allows a user to add their funds into this pool
         //transferFrom msg.sender to this pool's funds
-        IERC20(depositTokenAddress).transfer(address(this), amount);
+        IERC20(depositTokenAddress).transferFrom(msg.sender, address(this), amount);
 
         //add amount to userToDeposits[sender]
         userToDeposits[msg.sender] += amount;
@@ -230,7 +254,8 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         //uint currentPositionBalance = subgraphContract.currentPositionBalance()
 		//CURRENTPOSITIONBALANCE IS BEFORE THE COUNT IS UPDATED FROM THIS DEPOSIT
         //**TESTING************************************************************
-        uint currentPositionBalance = userToDeposits[msg.sender];
+        uint currentPositionBalance = simulatedPositionBalance;
+        simulatedPositionBalance += amount;
 		//*********************************************************************
 
         uint ratio = percent(amount, currentPositionBalance, 4);
@@ -245,28 +270,46 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
 	//******************************************************************************************************************************************
 	//TESTING, THIS FUNCTION SIMULATES POOL FEES COLLECTED, OTHER USERS DEPOSITING INTO POOL etc
-	uint simulatedPositionBalance = 0;
+	uint public simulatedPositionBalance = 2000000000000000000000;
 	event EpToken(address pToken);
     event TA(uint amt);
-	function simulatePoolActivity() public {
+    function simulateInterestGained() public {
+        simulatedPositionBalance += 1000000000000000000000;
+        //Mint test tokens to pool
+        TestToken(depositTokenAddress).mint(address(this), 1000000000000000000000);
+		emit EpToken(pTokenAddress);
+
+    }
+	function simulateUserDeposit(uint amount) public {
 		//****************************************************
 		//SIMULATE DEPOSIT
-		//uint amount = 1000000000000000000000;
-		//userToDeposits[0x30CF84E121F2105e638746dCcCffebCE65B18F7C] += amount;
-        //deposited += amount;
 
-        uint ratio = percent(deposited, deposited, 4);
+        TestToken(depositTokenAddress).mint(address(this), amount);
+
+        //add amount to userToDeposits[sender]
+        userToDeposits[address(0x30CF84E121F2105e638746dCcCffebCE65B18F7C)] += amount;
+        deposited += amount;
+
+        //Instantiate Subgraph contract based on 'currentDepositHoldingAddress' address
+
+        //get current amount of deposit tokens in deposit position
+        //REPLACE WITH CALL TO SUBGRAPH CONTRACT .currentPositionBalance()
+        //uint currentPositionBalance = subgraphContract.currentPositionBalance()
+		//CURRENTPOSITIONBALANCE IS BEFORE THE COUNT IS UPDATED FROM THIS DEPOSIT
+        //**TESTING************************************************************
+        uint currentPositionBalance = simulatedPositionBalance;
+        simulatedPositionBalance += amount;
+		//*********************************************************************
+
+        uint ratio = percent(amount, currentPositionBalance, 4);
 
         //mint ptokens to user based on proportion of (amount)/(total # of tokens in position) = (ptokens to mint)/(ptoken.totalSupply())
 		uint pTokensToMint = (ratio * IERC20(pTokenAddress).totalSupply()) / (10000);
 		PoolToken pTokenContract = PoolToken(pTokenAddress);
-        pTokenContract.mint(0x30CF84E121F2105e638746dCcCffebCE65B18F7C, pTokensToMint);
+        pTokenContract.mint(address(0x30CF84E121F2105e638746dCcCffebCE65B18F7C), pTokensToMint);
 
-		//mint test (deposit) tokens to this pool manager, 1000...0000 for thi fake deposit, 1000...0000 for the fake interest gained
-		TestToken(depositTokenAddress).mint(address(this), deposited);
-        deposited = deposited*2;
-        simulatedPositionBalance = deposited * 3;
-		emit EpToken(pTokenAddress);
+
+
 		//****************************************************
 
 	}
@@ -281,23 +324,12 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
         //read the currentDepositHoldingAddress global address
 		//get current amount of deposit tokens in deposit position
         //REPLACE WITH CALL TO currentTargetSubgraphAddress .currentPositionBalance()
-        //uint currentPositionBalance = subgraphContract.currentPositionBalance()()
+        //uint currentPositionBalance = subgraphContract.currentPositionBalance()
         //**TESTING************************************************************
 		
         uint currentPositionBalance = simulatedPositionBalance;
 		simulatedPositionBalance -= amount;
 		//*********************************************************************
-
-        uint profit = currentPositionBalance - deposited;
-
-
-        if (profit > 0) {
-            uint bonusAmount = (profit*10)/100;
-
-            //call the subgraph withdraw function to the bonusUser for bonusAmount
-
-            currentPositionBalance -= bonusAmount; 
-        }
 
         require(currentPositionBalance > 0, "Position has no assets");
 
@@ -312,39 +344,47 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 		if (digitToRound >= 5 && pTokensToBurn != senderBalancePToken) {
 			pTokensToBurn += 1;
 		}
-
-        emit TA(deposited);
-
+        
 		require(pTokensToBurn <= senderBalancePToken, "Withdraw amount greater than principal + interest owed to sender");
 
         //call the subgraph withdraw function passing the currentDepositHoldingAddress address and the amount of deposit tokens to withdraw
         //funds are received by the pool (amount)
 
-        //Subtract amount from userToDeposits[msg.sender]
-		uint priorBalance = userToDeposits[msg.sender];
-
 		//Fees Applied
-		uint feesToLevy = 0;
+		uint applicableProfit = 0;
 		if (amount > userToDeposits[msg.sender]) {
             //if amount > userToDeposits[msg.sender], set userToDeposits[msg.sender] to 0 and levy fees on the value of amount - userToDeposits[msg.sender]
-			feesToLevy = amount - userToDeposits[msg.sender];
+			applicableProfit = amount - userToDeposits[msg.sender];
 			userToDeposits[msg.sender] = 0;
 		} else {
             //if userToDeposits[msg.sender] >= amount, set userToDeposits[msg.sender] -= amount, levy no fees
 			userToDeposits[msg.sender] -= amount;
 		}
 
-        deposited = currentPositionBalance - amount;
-		
-		uint protocolFee = (feesToLevy / 10000) * protocolFeePercentage;
-		uint amountToUser = amount - protocolFee;
+		uint protocolFee = (applicableProfit / 10000) * protocolFeePercentage;
+        uint bonusPayout = (applicableProfit / 10000) * bonusPercentage;
+        uint payouts = protocolFee + bonusPayout;
+		require(amount > payouts, "Withdraw value too high after accounting for fees");
+
+        uint amountToUser = amount - protocolFee;
 		if (protocolFee > 0) {
 			applyProtocolFees(protocolFee);
 		}
+        
+        amountToUser -= bonusPayout;
+        if (bonusPayout > 0) {
+            applyBonusPayout(bonusPayout);
+        }
 
         //remaining funds after fee applicable are transfered to user
 		IERC20(depositTokenAddress).approve(address(this), amountToUser);
 		IERC20(depositTokenAddress).transferFrom(address(this), msg.sender, amountToUser);
+
+        if (deposited >= amount) {
+            deposited -= amount;
+        } else {
+            deposited = 0;
+        }
 
         //burn ptokens
 		PoolToken pTokenContract = PoolToken(pTokenAddress);
@@ -355,15 +395,24 @@ contract PoolManager is Ownable, IPoolManager, IERC165 {
 
     }
 
+    function applyBonusPayout(uint payoutAmount) internal {
+        //Bonus FEES ARE TO BE CALCULATED AND SENT WHEN A USER BURNS THEIR pTokens.
+        IERC20(depositTokenAddress).transfer(bonusUser, payoutAmount);
+    }
+
 	function applyProtocolFees(uint protocolFee) internal {
         //PROTOCOL FEES ARE TO BE CALCULATED AND SENT WHEN A USER BURNS THEIR pTokens.
 
-        //Pool shall approve the reserve to spend/transact with the revenueToken the collectionTokenAmount
         IERC20(depositTokenAddress).approve(reserveContractAddress, protocolFee);
 
         //now convert and send protocol level revenues to reserve
         ProtocolReserveManager protocolReserve = ProtocolReserveManager(reserveContractAddress);
-        protocolReserve.collectProtocolRevenue(address(this), depositTokenAddress, protocolFee);
+        
+        //Calls the transferRevenueAsWETH function to possibly convert to WETH and do the actual transfer
+        protocolReserve.transferRevenueAsWETH(address(this), depositTokenAddress, protocolFee);
+
+        protocolReserve.updateProtocolRevenueFactor(protocolFee);
+
     }
 
     function approvePool() public onlyOwner {

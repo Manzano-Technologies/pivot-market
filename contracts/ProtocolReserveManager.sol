@@ -51,10 +51,6 @@ contract ProtocolReserveManager is Ownable {
 
     //Easily pull the pool by its title
     mapping(bytes32 => address) public titleToPool;
-
-    //RevenueCollected emits the pool that the revenue was collected from and the amount of revenue collected
-    event RevenueCollected(address pool, uint256 amount);
-    
     event TokensWithdrawn(address indexed token, address indexed recipient, uint256 amount);
 
     event PoolContractDeployed(address contractAddress);
@@ -190,7 +186,7 @@ contract ProtocolReserveManager is Ownable {
         return address(0);
     }
 
-    function transferRevenueAsWETH(address pool, address revenueToken, uint amount) internal {
+    function transferRevenueAsWETH(address pool, address revenueToken, uint amount) public {
         //This function delivers the revenue as WETH to the reserve contract
         //If the revenueToken is not WETH and a UniswapV3 pool exists, swap the token for WETH and transfer it to reserve contract
         //This function is internal, only being called within the 'collectProtocolRevenue()' logic to send revenue to the reserve contract
@@ -226,15 +222,9 @@ contract ProtocolReserveManager is Ownable {
         }
     }
 
-    function collectProtocolRevenue(address pool, address revenueToken, uint256 amount) external {
-        //This function takes protocol level revenues from the pool contract and sends to the protocol reserve
-        // Must be called from a pool contract that is depositing fees into the protocol reserve
-        //The pool contract must approve the spending from this reserve contract
-        
+    function updateProtocolRevenueFactor(uint256 amount) external {
+        //This function updates the current withdraw intervals reserve factor
         require(amount > 0, "Amount must be greater than zero");
-
-        //Calls the transferRevenueAsWETH function to possibly convert to WETH and do the actual transfer
-        transferRevenueAsWETH(pool, revenueToken, amount);
 
         //Increment the nonce for total number of protocol revenue collections across all pools
         uint priorNonce = collectionNonce;
@@ -246,8 +236,6 @@ contract ProtocolReserveManager is Ownable {
         uint supply = IERC20(protocolToken).totalSupply();
         uint256 scaledAmount = amount * (10**24);
         cummulativeReserveFactor[collectionNonce] = (scaledAmount / supply) + cummulativeReserveFactor[collectionNonce - 1];
-
-        emit RevenueCollected(pool, amount);
     }
 
     function withdrawRevenues(uint256 amount, address revenueToken) public {
