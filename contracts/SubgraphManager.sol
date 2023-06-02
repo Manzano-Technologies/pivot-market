@@ -2,12 +2,17 @@ pragma solidity ^0.8.8;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "./PoolManager.sol";
+import "./TestToken.sol";
 
 contract SubgraphManager is Ownable {
     //poolToDepositHoldingRegistry maps pools to the locaion of their deposits, if a pool currently using this subgraph's protocol (otherwise address(0))
+    //As an example, on an AAVE subgraph, the deposit holding could be the DAI pool, USDC pool or WETH etc
     mapping(address => address) public poolToDepositHoldingRegistry;
 
-    mapping(address => uint) public poolToDepositAmounts;
+    mapping(address => uint) public poolBalance;
+
+    mapping(address => address) poolToDepositToken;
 
     address royaltyUser;
 
@@ -17,14 +22,11 @@ contract SubgraphManager is Ownable {
 
     event ApprovalChanged(bool isApproved);
 
-    constructor() {
-        royaltyUser = address(msg.sender);
-    }
+    bytes32 public protocolName;
 
-    function currentPositionBalance(address pool) public {
-        address poolHoldingAddress = poolToDepositHoldingRegistry[pool];
-        //Using the functions on the contract at poolHoldingAddress, pull the current balance of the position for the pool
-        //Should include interest accumulated
+    constructor(bytes32 protocol) {
+        royaltyUser = address(msg.sender);
+        protocolName = protocol;
     }
 
     function updateroyaltyUser(address user) external onlyOwner {
@@ -39,17 +41,14 @@ contract SubgraphManager is Ownable {
         poolToDepositHoldingRegistry[pool] = depositHolding;
     }
 
-    function updateDepositAmount(address pool, uint amount, bool isWithdraw) internal {
+    function updatePoolBalance(address pool, uint amount, bool isWithdraw) internal {
         if (isWithdraw == true) {
-            poolToDepositAmounts[pool] -= amount;
+            poolBalance[pool] -= amount;
+            simulatedPositionBalance[pool] -= amount;
         } else {
-            poolToDepositAmounts[pool] += amount;
+            poolBalance[pool] += amount;
+            simulatedPositionBalance[pool] += amount;
         }
-    }
-
-    function withdrawToPoolAddress(address destinationAddress) external onlyOwner {
-        //Must be called from the pool contract
-        //Takes msg.sender (pool addr) and checks the current position balance of the pool
     }
 
     function approveSubgraph() public onlyOwner {
@@ -64,34 +63,96 @@ contract SubgraphManager is Ownable {
         emit ApprovalChanged(false);
     }
 
+
+
+
+
+    //*******TESTING************************************************************************************************
+    mapping(address => uint) simulatedPositionBalance;
+    
+    function simulateInterestGained(uint amount) public {
+        //instantiate pool
+
+        address poolAddress = msg.sender;
+        updatePoolBalance(poolAddress, amount, false);
+        PoolManager poolContractInstance = PoolManager(poolAddress);
+
+        address depositTokenAddress = poolContractInstance.depositTokenAddress();
+        
+        //Mint test tokens to pool
+        TestToken(depositTokenAddress).mint(address(this), amount);
+    }
+
+    //***************************************************************************************************************************************************
+
+
+
+
+
     // CUSTOM FUNCTIONS BY SUBGRAPH
 
     //PARENT_ADDRESS is an address of a factory/registry/etc on the protocol that contains some function to verify pool-level addresses on the protocol
     address immutable PARENT_ADDRESS = address(0);
 
-    function deposit(uint amount) public returns (bool depositSuccess) {
+    function deposit(uint amount, address depositTokenAddress, address pivotTargetAddress, address originalSender) external returns (bool depositSuccess) {
         //Function should be agnostic to whether deposit is from a pivot or a new user deposit within a pool
 
 
-        //*******TESTING********************************************************************************
-        //targetAddress will be the address of the contract where the funds will be held/deposited into
-        address targetAddress = address(this);
-        //*********************************************************************
-        
-        if (targetAddress != poolToDepositHoldingRegistry[msg.sender]) {
-            updateRegistry(msg.sender, targetAddress);
-            updateDepositAmount(msg.sender, amount, false);
+        address poolAddress = msg.sender;
+        if (poolToDepositToken[poolAddress] == address(0)) {
+            poolToDepositToken[poolAddress] = depositTokenAddress;
         }
+
+        require(poolToDepositToken[poolAddress] == depositTokenAddress, "Invalid depositTokenAddress passed to deposit function");
+
+        //Interaction with current protocol pool to deposit the deposits
+
+        //***********TESTING***********************************************************************************************
+        //No transfer from this contract but rather pass the poolAddress as the withdraw destination in the function from the deposited protocol
+        bool depositSuccess = IERC20(depositTokenAddress).transferFrom(originalSender, address(this), amount);
+        require(depositSuccess == true, "transferFrom failed!");
+
+        //******************************************************************************************************************
+        
+        
+        updatePoolBalance(poolAddress, amount, false);
+        if (pivotTargetAddress != poolToDepositHoldingRegistry[poolAddress]) {
+            updateRegistry(poolAddress, pivotTargetAddress);
+        }
+
+        return true;
     }
 
-    function withdraw(uint amount) public returns (bool withdrawSuccess) {
+    function withdraw(bool isPivot, uint amount, address destination) external returns (bool withdrawSent) {
         //Function should be agnostic to whether withdraw is from a pivot or a user withdraw from pool
 
-        updateDepositAmount(msg.sender, amount, true);
-        //if withdraw amount is the entire amoun of deposits from that pool {
-        updateRegistry(msg.sender, address(0));
+        //poolAddress must be sender, prevents users attempting to withdraw funds on behalf of a pool without calling the proper parent functions
+        address poolAddress = msg.sender;
 
-        //}
+        address depositTokenAddress = poolToDepositToken[poolAddress];
+
+        address to = destination;
+        if (isPivot == true) {
+            to = poolAddress;
+        }
+
+        uint poolDeposit = poolBalance[poolAddress];
+
+        updatePoolBalance(poolAddress, amount, true);
+        if (amount >= poolBalance[poolAddress]) {
+            updateRegistry(poolAddress, address(0));
+        }
+
+        //Interaction with current protocol pool to withdraw the deposits
+
+        //***********TESTING***********************************************************************************************
+        //No transfer from this contract but rather pass the poolAddress as the withdraw destination in the function from the deposited protocol
+        require(amount <= poolDeposit, "Pool Balance must be greater than or equal to requested withdraw");
+        bool withdrawSuccess = IERC20(depositTokenAddress).transfer(to, amount);
+        require(withdrawSuccess == true, "Transfer Failed!");
+        //******************************************************************************************************************
+        
+        return true;
     }
 
     function emergencyFundWithdraw(address pool) public {
@@ -102,9 +163,17 @@ contract SubgraphManager is Ownable {
 
     function getDepositAddressByPoolId(bytes32 pivotTargetPoolId) external returns (address) {
         //Conversion function that takes in the id/name/identifier of pool entity on the subgraph and returns the address with functions to stake/deposit on the protocol
-        address depositAddress = address(0);
+        address depositAddress = address(this);
 
         return depositAddress;
+    }
+
+    function currentPositionBalance(address pool) public view returns (uint) {
+        address poolHoldingAddress = poolToDepositHoldingRegistry[pool];
+        uint balance = 0;
+        //Using the functions on the contract at poolHoldingAddress, pull the current balance of the position for the pool
+        //Should include interest accumulated
+        return simulatedPositionBalance[pool];
     }
 
     function targetVerifier(address targetAddress) external {

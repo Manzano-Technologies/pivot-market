@@ -36,6 +36,7 @@ export type { IUniswapV3PoolImmutables } from "./IUniswapV3PoolImmutables";
 export type { IUniswapV3PoolOwnerActions } from "./IUniswapV3PoolOwnerActions";
 export type { IUniswapV3PoolState } from "./IUniswapV3PoolState";
 export type { ISwapRouter } from "./ISwapRouter";
+export type { DeterminationContract } from "./DeterminationContract";
 export type { GovernorContract } from "./GovernorContract";
 export type { TimeLock } from "./TimeLock";
 export type { GovernanceToken } from "./GovernanceToken";
@@ -85,6 +86,7 @@ export { IUniswapV3PoolImmutables__factory } from "./factories/IUniswapV3PoolImm
 export { IUniswapV3PoolOwnerActions__factory } from "./factories/IUniswapV3PoolOwnerActions__factory";
 export { IUniswapV3PoolState__factory } from "./factories/IUniswapV3PoolState__factory";
 export { ISwapRouter__factory } from "./factories/ISwapRouter__factory";
+export { DeterminationContract__factory } from "./factories/DeterminationContract__factory";
 export { GovernorContract__factory } from "./factories/GovernorContract__factory";
 export { TimeLock__factory } from "./factories/TimeLock__factory";
 export { GovernanceToken__factory } from "./factories/GovernanceToken__factory";

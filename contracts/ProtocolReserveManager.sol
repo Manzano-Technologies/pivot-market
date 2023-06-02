@@ -34,9 +34,9 @@ contract ProtocolReserveManager is Ownable {
     //protocolToken is the token that when held accumulates protocol revenue for the holder
     address public protocolToken;
 
-    address TESTNETWETH = address(0xEe01c0CD76354C383B8c7B4e65EA88D00B06f36f);
+    address addressWETH = address(0xEe01c0CD76354C383B8c7B4e65EA88D00B06f36f);
 //    address addressWETH = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
-    address addressWETH = TESTNETWETH;
+
     IERC20 tokenWETH = IERC20(addressWETH);
 
     uint256 collectionNonce = 0;
@@ -55,19 +55,19 @@ contract ProtocolReserveManager is Ownable {
 
     event PoolContractDeployed(address contractAddress);
 
-
     constructor(address token, address governorAddress) {
         cummulativeReserveFactor[0] = 0;
         protocolToken = token;
         governorContract = governorAddress;
     }
 
-    function deployPoolContract(address depositToken, bytes32 title, uint256 initialDepositAmount) public {        
-        PoolManager poolManagerContract = new PoolManager(depositToken, title, address(this));  // Deploy PoolManager
+    function deployPoolContract(address depositToken, bytes32 title, uint256 initialDepositAmount, address subgraphPivotTarget, bytes32 poolIdPivotTarget) public {        
+        PoolManager poolManagerContract = new PoolManager(depositToken, title, address(this), subgraphPivotTarget, poolIdPivotTarget);  // Deploy PoolManager
         address poolManagerAddress = address(poolManagerContract);
         TestToken testToken = TestToken(depositToken);
         //testToken.mint(address(this), initialDepositAmount);
-        IERC20(depositToken).transferFrom(msg.sender, poolManagerAddress, initialDepositAmount);
+        bool deployTransferSuccess = IERC20(depositToken).transferFrom(msg.sender, poolManagerAddress, initialDepositAmount);
+        require(deployTransferSuccess == true, "transferFrom failed!");
 
         poolManagerContract.initializePoolTokens(msg.sender, initialDepositAmount);
 
@@ -80,44 +80,6 @@ contract ProtocolReserveManager is Ownable {
         emit PoolContractDeployed(poolManagerAddress);
     }
 
-    //********************************************************************************************************************************************
-    //DEPRECATED FUNCTION, POOL SHOULD BE UNIFORM AND DEPLOYED DIRECTLY FROM THIS CONTRACT
-
-    function includeNewPool(address newPoolAddress) external {
-        //check if compatible with IPoolManagerStandard
-        //If so, apply the IPoolManagerStandard interface to the address
-        bytes4 interfaceId = type(IPoolManagerStandard).interfaceId;
-        IERC165 poolManagerCompatibilityInstance = IERC165(newPoolAddress);
-        bool interfaceSupported = poolManagerCompatibilityInstance.supportsInterface(interfaceId);
-        require(interfaceSupported == true, "Pool is incompatible with the standard pool interface");
-
-        PoolManager poolContractInstance = PoolManager(newPoolAddress);
-
-
-
-        //Check if ownership has been transfered to this reserve contract
-        address poolOwner = poolContractInstance.owner();
-        require(poolOwner == address(this), "Pool owner must be the reserve contract to be included. Call the transferOwner() function on the pool with this contract address as argument");
-
-        //Call various onlyOwner functions to set things like the reserveAddress and other config variables that determine the flow of funds
-        address poolReserveAddress = poolContractInstance.reserveContractAddress();
-        if (poolReserveAddress != address(this)) {
-            poolContractInstance.setReserveContractAddress(address(this));
-        }
-
-        //transfer ownership to timelock
-        address timelock = IGovernorContract(governorContract).timelock();
-        poolContractInstance.transferOwnership(timelock);
-        bytes32 title = poolContractInstance.title();
-
-        //add to pool list
-        titleToPool[title] = newPoolAddress;
-
-        //emit the event
-        emit PoolContractDeployed(newPoolAddress);
-    }
-    //***********************************************************************************************************************************************************
-
     //TESTING FUNCTION ****************************************************************************************************************************************
     //execute separate contract with ERC 20 token, and mint to this (pool) address 
 
@@ -126,23 +88,16 @@ contract ProtocolReserveManager is Ownable {
         TestToken testToken = new TestToken(msg.sender);  // Deploy TestToken
         emit TestTokenDeployed(address(testToken));
     }
-
     //****************************************************************************************************************************************
-
 
     function acctProtocolRevenueCalculation(address user) public returns (uint256) {
         //This function gets executed to calculate the **PROTOCOL LEVEL** revenues accumulated for the sender since the last calculation
-        //Can be manually called to update protocol level user revenues
         //Called every time user/protocol token holder attempts to withdraw revenues
-            //But this function does not send any revenues to the user, but rather just updates the calculations to give current amounts available
-        //Called every token transfer to track updates to user accumulations
-
-        //In the case of transfers, this function should execute before the balance is updated
+        //Updates the calculations to give current amounts available
+        //Called every token transfer to track updates to user accumulationsbefore the balance is updated
 
         //Function takes the most recently recorded cummulativeReserveFactor and subtracts the reserve factor of the last time the user revenue was updated. 
         //This gets the per unit protocol revenues for a token holder since holding that amount of tokens
-
-        //Adds the appropriate revenue to the user's balance
         //updates the user collection nonce
 
         uint256 userProtocolTokenBalance = IERC20(protocolToken).balanceOf(user);
@@ -160,7 +115,6 @@ contract ProtocolReserveManager is Ownable {
     }
     
     function findSwapPool(address token) public returns (address) {
-
         //This function finds the UniswapV3 pool to perform a swap to WETH
         //Currently commented out all Uniswap integration while on testnets
 
@@ -186,7 +140,7 @@ contract ProtocolReserveManager is Ownable {
         return address(0);
     }
 
-    function transferRevenueAsWETH(address pool, address revenueToken, uint amount) public {
+    function transferRevenueAsWETH(address pool, address revenueToken, uint amount) public returns (bool success) {
         //This function delivers the revenue as WETH to the reserve contract
         //If the revenueToken is not WETH and a UniswapV3 pool exists, swap the token for WETH and transfer it to reserve contract
         //This function is internal, only being called within the 'collectProtocolRevenue()' logic to send revenue to the reserve contract
@@ -194,7 +148,8 @@ contract ProtocolReserveManager is Ownable {
 
         //pool that is origin of revenue has already approved the transfer executedwithin this reserve contract
         //transfer from origin pool to this reserve contract
-        IERC20(revenueToken).transferFrom(pool, address(this), amount);    
+        bool transferRevenueSuccess = IERC20(revenueToken).transferFrom(pool, address(this), amount);
+        require(transferRevenueSuccess == true, "transferFrom failed!");
 
         if (revenueToken != addressWETH) {
             //Call the findSwapPool() function to get the swap pool
@@ -220,6 +175,8 @@ contract ProtocolReserveManager is Ownable {
                 );
             }
         }
+
+        return true;
     }
 
     function updateProtocolRevenueFactor(uint256 amount) external {
@@ -252,10 +209,10 @@ contract ProtocolReserveManager is Ownable {
         require(revenueAvailableByUser[msg.sender] >= amount, "Insufficient balance2");
 
         //TESTING TRANSFERS INPUT REV TOKEN, IN PRODUCTION THIS IS WETH
-        //tokenWETH.transfer(msg.sender, amount);
-        IERC20(revenueToken).transfer(msg.sender, amount);
-        
         revenueAvailableByUser[msg.sender] -= amount;
+        bool revenueWithdrawSuccess = IERC20(revenueToken).transfer(msg.sender, amount);
+        require(revenueWithdrawSuccess == true, "Transfer failed!");
+        
         emit TokensWithdrawn(revenueToken, msg.sender, amount);
 
     }

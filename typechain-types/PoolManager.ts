@@ -22,6 +22,9 @@ export interface PoolManagerInterface extends utils.Interface {
   functions: {
     "addDetermination(address)": FunctionFragment;
     "approvePool()": FunctionFragment;
+    "approvedSubgraphPivotTarget()": FunctionFragment;
+    "bonusPayout()": FunctionFragment;
+    "depositTokenAddress()": FunctionFragment;
     "deposited()": FunctionFragment;
     "determinationContractAddress()": FunctionFragment;
     "determinePivot(bytes32,address)": FunctionFragment;
@@ -31,12 +34,15 @@ export interface PoolManagerInterface extends utils.Interface {
     "latestSubgraphTimeseries(address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "percent(uint256,uint256,uint256)": FunctionFragment;
+    "pivotDeposit()": FunctionFragment;
+    "pivotWithdraw()": FunctionFragment;
     "poolApproved()": FunctionFragment;
+    "protocolFee()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "reserveContractAddress()": FunctionFragment;
     "setReserveContractAddress(address)": FunctionFragment;
     "setSubgraphTimeseriesDataPoint(address,uint256,bytes32)": FunctionFragment;
-    "simulateInterestGained()": FunctionFragment;
+    "simulateInterestGained(uint256)": FunctionFragment;
     "simulateUserDeposit(uint256)": FunctionFragment;
     "simulatedPositionBalance()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -53,6 +59,18 @@ export interface PoolManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "approvePool",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "approvedSubgraphPivotTarget",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "bonusPayout",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositTokenAddress",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "deposited", values?: undefined): string;
@@ -86,7 +104,19 @@ export interface PoolManagerInterface extends utils.Interface {
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "pivotDeposit",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "pivotWithdraw",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "poolApproved",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "protocolFee",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -107,7 +137,7 @@ export interface PoolManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "simulateInterestGained",
-    values?: undefined
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "simulateUserDeposit",
@@ -147,6 +177,18 @@ export interface PoolManagerInterface extends utils.Interface {
     functionFragment: "approvePool",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "approvedSubgraphPivotTarget",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "bonusPayout",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "depositTokenAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "deposited", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "determinationContractAddress",
@@ -175,7 +217,19 @@ export interface PoolManagerInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "percent", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "pivotDeposit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "pivotWithdraw",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "poolApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "protocolFee",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -293,13 +347,19 @@ export interface PoolManager extends BaseContract {
 
   functions: {
     addDetermination(
-      determinationContract: string,
+      determinationContractAddressToAdd: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     approvePool(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    approvedSubgraphPivotTarget(overrides?: CallOverrides): Promise<[string]>;
+
+    bonusPayout(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    depositTokenAddress(overrides?: CallOverrides): Promise<[string]>;
 
     deposited(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -342,7 +402,17 @@ export interface PoolManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { quotient: BigNumber }>;
 
+    pivotDeposit(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    pivotWithdraw(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     poolApproved(overrides?: CallOverrides): Promise<[boolean]>;
+
+    protocolFee(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -363,6 +433,7 @@ export interface PoolManager extends BaseContract {
     ): Promise<ContractTransaction>;
 
     simulateInterestGained(
+      amt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -402,13 +473,19 @@ export interface PoolManager extends BaseContract {
   };
 
   addDetermination(
-    determinationContract: string,
+    determinationContractAddressToAdd: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   approvePool(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  approvedSubgraphPivotTarget(overrides?: CallOverrides): Promise<string>;
+
+  bonusPayout(overrides?: CallOverrides): Promise<BigNumber>;
+
+  depositTokenAddress(overrides?: CallOverrides): Promise<string>;
 
   deposited(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -451,7 +528,17 @@ export interface PoolManager extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  pivotDeposit(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  pivotWithdraw(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   poolApproved(overrides?: CallOverrides): Promise<boolean>;
+
+  protocolFee(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -472,6 +559,7 @@ export interface PoolManager extends BaseContract {
   ): Promise<ContractTransaction>;
 
   simulateInterestGained(
+    amt: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -508,11 +596,17 @@ export interface PoolManager extends BaseContract {
 
   callStatic: {
     addDetermination(
-      determinationContract: string,
+      determinationContractAddressToAdd: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     approvePool(overrides?: CallOverrides): Promise<void>;
+
+    approvedSubgraphPivotTarget(overrides?: CallOverrides): Promise<string>;
+
+    bonusPayout(overrides?: CallOverrides): Promise<BigNumber>;
+
+    depositTokenAddress(overrides?: CallOverrides): Promise<string>;
 
     deposited(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -553,7 +647,13 @@ export interface PoolManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    pivotDeposit(overrides?: CallOverrides): Promise<boolean>;
+
+    pivotWithdraw(overrides?: CallOverrides): Promise<boolean>;
+
     poolApproved(overrides?: CallOverrides): Promise<boolean>;
+
+    protocolFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -571,7 +671,10 @@ export interface PoolManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    simulateInterestGained(overrides?: CallOverrides): Promise<void>;
+    simulateInterestGained(
+      amt: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     simulateUserDeposit(
       amount: BigNumberish,
@@ -624,13 +727,19 @@ export interface PoolManager extends BaseContract {
 
   estimateGas: {
     addDetermination(
-      determinationContract: string,
+      determinationContractAddressToAdd: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     approvePool(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    approvedSubgraphPivotTarget(overrides?: CallOverrides): Promise<BigNumber>;
+
+    bonusPayout(overrides?: CallOverrides): Promise<BigNumber>;
+
+    depositTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     deposited(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -673,7 +782,17 @@ export interface PoolManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    pivotDeposit(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    pivotWithdraw(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     poolApproved(overrides?: CallOverrides): Promise<BigNumber>;
+
+    protocolFee(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -694,6 +813,7 @@ export interface PoolManager extends BaseContract {
     ): Promise<BigNumber>;
 
     simulateInterestGained(
+      amt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -731,12 +851,22 @@ export interface PoolManager extends BaseContract {
 
   populateTransaction: {
     addDetermination(
-      determinationContract: string,
+      determinationContractAddressToAdd: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     approvePool(
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    approvedSubgraphPivotTarget(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    bonusPayout(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    depositTokenAddress(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     deposited(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -782,7 +912,17 @@ export interface PoolManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    pivotDeposit(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    pivotWithdraw(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     poolApproved(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    protocolFee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -805,6 +945,7 @@ export interface PoolManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     simulateInterestGained(
+      amt: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

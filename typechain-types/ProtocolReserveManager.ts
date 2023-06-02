@@ -23,10 +23,9 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     "_isContract(address)": FunctionFragment;
     "acctProtocolRevenueCalculation(address)": FunctionFragment;
     "cummulativeReserveFactor(uint256)": FunctionFragment;
-    "deployPoolContract(address,bytes32,uint256)": FunctionFragment;
+    "deployPoolContract(address,bytes32,uint256,address,bytes32)": FunctionFragment;
     "deployTestToken()": FunctionFragment;
     "findSwapPool(address)": FunctionFragment;
-    "includeNewPool(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "protocolToken()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -51,7 +50,7 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "deployPoolContract",
-    values: [string, BytesLike, BigNumberish]
+    values: [string, BytesLike, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "deployTestToken",
@@ -59,10 +58,6 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "findSwapPool",
-    values: [string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "includeNewPool",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -129,10 +124,6 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "findSwapPool",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "includeNewPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -268,6 +259,8 @@ export interface ProtocolReserveManager extends BaseContract {
       depositToken: string,
       title: BytesLike,
       initialDepositAmount: BigNumberish,
+      subgraphPivotTarget: string,
+      poolIdPivotTarget: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -277,11 +270,6 @@ export interface ProtocolReserveManager extends BaseContract {
 
     findSwapPool(
       token: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    includeNewPool(
-      newPoolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -353,6 +341,8 @@ export interface ProtocolReserveManager extends BaseContract {
     depositToken: string,
     title: BytesLike,
     initialDepositAmount: BigNumberish,
+    subgraphPivotTarget: string,
+    poolIdPivotTarget: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -362,11 +352,6 @@ export interface ProtocolReserveManager extends BaseContract {
 
   findSwapPool(
     token: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  includeNewPool(
-    newPoolAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -432,17 +417,14 @@ export interface ProtocolReserveManager extends BaseContract {
       depositToken: string,
       title: BytesLike,
       initialDepositAmount: BigNumberish,
+      subgraphPivotTarget: string,
+      poolIdPivotTarget: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
 
     deployTestToken(overrides?: CallOverrides): Promise<void>;
 
     findSwapPool(token: string, overrides?: CallOverrides): Promise<string>;
-
-    includeNewPool(
-      newPoolAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -467,7 +449,7 @@ export interface ProtocolReserveManager extends BaseContract {
       revenueToken: string,
       amount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     uniswapPoolCache(arg0: string, overrides?: CallOverrides): Promise<string>;
 
@@ -542,6 +524,8 @@ export interface ProtocolReserveManager extends BaseContract {
       depositToken: string,
       title: BytesLike,
       initialDepositAmount: BigNumberish,
+      subgraphPivotTarget: string,
+      poolIdPivotTarget: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -551,11 +535,6 @@ export interface ProtocolReserveManager extends BaseContract {
 
     findSwapPool(
       token: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    includeNewPool(
-      newPoolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -628,6 +607,8 @@ export interface ProtocolReserveManager extends BaseContract {
       depositToken: string,
       title: BytesLike,
       initialDepositAmount: BigNumberish,
+      subgraphPivotTarget: string,
+      poolIdPivotTarget: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -637,11 +618,6 @@ export interface ProtocolReserveManager extends BaseContract {
 
     findSwapPool(
       token: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    includeNewPool(
-      newPoolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

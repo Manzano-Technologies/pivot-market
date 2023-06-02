@@ -15,29 +15,32 @@ import { FunctionFragment, Result } from "@ethersproject/abi";
 import { Listener, Provider } from "@ethersproject/providers";
 import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 
-export interface UniswapV3FactoryInterface extends utils.Interface {
-  contractName: "UniswapV3Factory";
+export interface DeterminationContractInterface extends utils.Interface {
+  contractName: "DeterminationContract";
   functions: {
-    "getPool(address,address,uint24)": FunctionFragment;
+    "calculation(uint256[],uint256,uint256[],uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "getPool",
-    values: [string, string, BigNumberish]
+    functionFragment: "calculation",
+    values: [BigNumberish[], BigNumberish, BigNumberish[], BigNumberish]
   ): string;
 
-  decodeFunctionResult(functionFragment: "getPool", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "calculation",
+    data: BytesLike
+  ): Result;
 
   events: {};
 }
 
-export interface UniswapV3Factory extends BaseContract {
-  contractName: "UniswapV3Factory";
+export interface DeterminationContract extends BaseContract {
+  contractName: "DeterminationContract";
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: UniswapV3FactoryInterface;
+  interface: DeterminationContractInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -59,46 +62,51 @@ export interface UniswapV3Factory extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getPool(
-      arg0: string,
-      arg1: string,
-      arg2: BigNumberish,
+    calculation(
+      targetSubgraphDataset: BigNumberish[],
+      targetDatapointCount: BigNumberish,
+      currentSubgraphDataset: BigNumberish[],
+      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[boolean] & { determination: boolean }>;
   };
 
-  getPool(
-    arg0: string,
-    arg1: string,
-    arg2: BigNumberish,
+  calculation(
+    targetSubgraphDataset: BigNumberish[],
+    targetDatapointCount: BigNumberish,
+    currentSubgraphDataset: BigNumberish[],
+    currentDatapointCount: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<string>;
+  ): Promise<boolean>;
 
   callStatic: {
-    getPool(
-      arg0: string,
-      arg1: string,
-      arg2: BigNumberish,
+    calculation(
+      targetSubgraphDataset: BigNumberish[],
+      targetDatapointCount: BigNumberish,
+      currentSubgraphDataset: BigNumberish[],
+      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<string>;
+    ): Promise<boolean>;
   };
 
   filters: {};
 
   estimateGas: {
-    getPool(
-      arg0: string,
-      arg1: string,
-      arg2: BigNumberish,
+    calculation(
+      targetSubgraphDataset: BigNumberish[],
+      targetDatapointCount: BigNumberish,
+      currentSubgraphDataset: BigNumberish[],
+      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getPool(
-      arg0: string,
-      arg1: string,
-      arg2: BigNumberish,
+    calculation(
+      targetSubgraphDataset: BigNumberish[],
+      targetDatapointCount: BigNumberish,
+      currentSubgraphDataset: BigNumberish[],
+      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
