@@ -18,12 +18,12 @@ import { TypedEventFilter, TypedEvent, TypedListener, OnEvent } from "./common";
 export interface DeterminationContractInterface extends utils.Interface {
   contractName: "DeterminationContract";
   functions: {
-    "calculation(uint256[],uint256,uint256[],uint256)": FunctionFragment;
+    "calculation(uint256[],uint256[])": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "calculation",
-    values: [BigNumberish[], BigNumberish, BigNumberish[], BigNumberish]
+    values: [BigNumberish[], BigNumberish[]]
   ): string;
 
   decodeFunctionResult(
@@ -64,27 +64,21 @@ export interface DeterminationContract extends BaseContract {
   functions: {
     calculation(
       targetSubgraphDataset: BigNumberish[],
-      targetDatapointCount: BigNumberish,
       currentSubgraphDataset: BigNumberish[],
-      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean] & { determination: boolean }>;
   };
 
   calculation(
     targetSubgraphDataset: BigNumberish[],
-    targetDatapointCount: BigNumberish,
     currentSubgraphDataset: BigNumberish[],
-    currentDatapointCount: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
 
   callStatic: {
     calculation(
       targetSubgraphDataset: BigNumberish[],
-      targetDatapointCount: BigNumberish,
       currentSubgraphDataset: BigNumberish[],
-      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
   };
@@ -94,9 +88,7 @@ export interface DeterminationContract extends BaseContract {
   estimateGas: {
     calculation(
       targetSubgraphDataset: BigNumberish[],
-      targetDatapointCount: BigNumberish,
       currentSubgraphDataset: BigNumberish[],
-      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
@@ -104,9 +96,7 @@ export interface DeterminationContract extends BaseContract {
   populateTransaction: {
     calculation(
       targetSubgraphDataset: BigNumberish[],
-      targetDatapointCount: BigNumberish,
       currentSubgraphDataset: BigNumberish[],
-      currentDatapointCount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

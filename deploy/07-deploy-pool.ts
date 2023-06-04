@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/dist/types";
-import { ethers, network } from "hardhat";
+import { ethers, network, upgrades } from "hardhat";
 import { MIN_DELAY, PoolContractDeployed_SIGNATURE, TestTokenDeployed_SIGNATURE, VOTING_DELAY, VOTING_PERIOD, developmentChains } from "../hardhat-helper-config";
 import { propose } from "../scripts/propose";
 import * as fs from "fs"
@@ -25,7 +25,7 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
 
     const governanceToken = await ethers.getContract("GovernanceToken");
     const reserveContractAddress = await governanceToken.reserveContract();
-
+    console.log('ZERG?', reserveContractAddress)
     const reserveContract = await ethers.getContractAt("ProtocolReserveManager", reserveContractAddress);
     const iface = new ethers.utils.Interface([PoolContractDeployed_SIGNATURE, TestTokenDeployed_SIGNATURE])
 
@@ -68,11 +68,11 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
 
     console.log('ZOINJKA', poolBalanceInSubgraph.toString(), (await testToken.balanceOf(subgraphA)).toString())
 
-    console.log(await poolContract.approvedSubgraphPivotTarget())
 
     await poolContract.determinePivot(ethers.utils.formatBytes32String('SUB B'), subgraphB)
     const withd = await poolContract.pivotWithdraw()
     await withd.wait()
+    console.log(await poolContract.approvedSubgraphPivotTarget())
 
     const depo = await poolContract.pivotDeposit();
 
@@ -87,8 +87,8 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     console.log((await poolContract.approvedSubgraphPivotTarget()).toString(), (await subgraphBContract.poolBalance(poolContractAddress)).toString(), (await testToken.balanceOf(subgraphB)).toString())
 
     // CALL THE POOL INTERACTION TO TRIGGER THE REVENUE DISTRIBUTION FUNCTIONALITY 
-
-    const pTokenContract = await ethers.getContractAt("PoolToken", "0x4339F9D3B368e71bDa5aede52FCf5e8F9DC6C605")
+    const pTokenAddress = await poolContract.pTokenAddress();
+    const pTokenContract = await ethers.getContractAt("PoolToken", pTokenAddress)
     // console.log("0x4339F9D3B368e71bDa5aede52FCf5e8F9DC6C605 - pToken.totalSupply() after init deposit", (await pTokenContract.totalSupply()).toString())
 
 
@@ -112,11 +112,11 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     // console.log('SIMULATED POSITION BAL', (await poolContract.simulatedPositionBalance()).toString())
     // console.log("TEST TOKEN BALANCES: ", (await testToken.totalSupply()).toString(), " (SUPPLY) //////// ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
     // console.log("USER DEPOS", (await poolContract.userToDeposits("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await poolContract.userToDeposits("0x30CF84E121F2105e638746dCcCffebCE65B18F7C")).toString())
-    // console.log("pToken.totalSupply() after depo from user 2", (await pTokenContract.totalSupply()).toString(), (await pTokenContract.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await pTokenContract.balanceOf("0x30CF84E121F2105e638746dCcCffebCE65B18F7C")).toString())
     console.log("TEST TOKEN BALANCES: ", (await testToken.totalSupply()).toString(), " (SUPPLY) //////// ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await testToken.balanceOf(subgraphA)).toString(), (await testToken.balanceOf(subgraphB)).toString())
-
+    console.log(poolContractAddress, 'addr')
+    console.log("pToken.totalSupply() after depo from user 2", (await pTokenContract.totalSupply()).toString(), (await pTokenContract.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await pTokenContract.balanceOf("0x30CF84E121F2105e638746dCcCffebCE65B18F7C")).toString())
     await pTokenContract.approve(poolContractAddress, BigInt(4000000000000000000000))
-    const poolInteraction1 = await poolContract.userWithdraw(BigInt(4000000000000000000000));
+    const poolInteraction1 = await poolContract.userWithdraw(BigInt(2000000000000000000000));
     const pi1 = await poolInteraction1.wait()
 
     // const poolInteraction2 = await poolContract.userWithdraw(BigInt(500000000000000000000));
@@ -138,7 +138,6 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
 
     // console.log("0x4339F9D3B368e71bDa5aede52FCf5e8F9DC6C605 - pToken.totalSupply() after withdraw 2", (await pTokenContract.totalSupply()).toString(), (await pTokenContract.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
     console.log("GOV TOKEN BALANCES: ", (await governanceToken.balanceOf(reserveContractAddress)).toString(), (await governanceToken.balanceOf(poolContractAddress)).toString(), (await governanceToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString(), (await governanceToken.balanceOf("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")).toString())
-    const govTokTrans = await governanceToken.transfer("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0", BigInt(2000000000000000000000))
 
     await poolContract.simulateInterestGained(BigInt(2000000000000000000000));
 
@@ -184,7 +183,11 @@ const deployTestPoolContract: DeployFunction = async function (hre: HardhatRunti
     // console.log("REVENUE AVAILABLE FOR 0x...2266: ", (await reserveContract.revenueAvailableByUser("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
     // console.log("REVENUE AVAILABLE FOR 0x...a6e0: ", (await reserveContract.revenueAvailableByUser("0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0")).toString())
 
-    console.log("RESERVE FACTOR 0,1,2,3: ", (await reserveContract.cummulativeReserveFactor(0)).toString(), (await reserveContract.cummulativeReserveFactor(1)).toString(), (await reserveContract.cummulativeReserveFactor(2)).toString(), (await reserveContract.cummulativeReserveFactor(3)).toString())
+    console.log("RESERVE FACTOR 0,1,2,3: ", reserveContractAddress, (await reserveContract.cummulativeReserveFactor(0)).toString(), (await reserveContract.cummulativeReserveFactor(1)).toString(), (await reserveContract.cummulativeReserveFactor(2)).toString(), (await reserveContract.cummulativeReserveFactor(3)).toString())
+
+
+    console.log("RESERVE FACTOR 0,1,2,3: ", reserveContractAddress, (await reserveContract.cummulativeReserveFactor(0)).toString(), (await reserveContract.cummulativeReserveFactor(1)).toString(), (await reserveContract.cummulativeReserveFactor(2)).toString(), (await reserveContract.cummulativeReserveFactor(3)).toString())
+
 
     // console.log("REVENUE AVAILABLE FOR 0x...2266: ", (await reserveContract.revenueAvailableByUser("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())
     // console.log("TEST TOKEN BALANCES: ", (await testToken.balanceOf(reserveContractAddress)).toString(), (await testToken.balanceOf(poolContractAddress)).toString(), (await testToken.balanceOf("0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266")).toString())

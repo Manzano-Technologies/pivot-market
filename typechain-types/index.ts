@@ -40,7 +40,6 @@ export type { DeterminationContract } from "./DeterminationContract";
 export type { GovernorContract } from "./GovernorContract";
 export type { TimeLock } from "./TimeLock";
 export type { GovernanceToken } from "./GovernanceToken";
-export type { IProtocolReserveManager } from "./IProtocolReserveManager";
 export type { IPoolManager } from "./IPoolManager";
 export type { PoolManager } from "./PoolManager";
 export type { PoolToken } from "./PoolToken";
@@ -48,6 +47,7 @@ export type { IGovernorContract } from "./IGovernorContract";
 export type { IPoolManagerStandard } from "./IPoolManagerStandard";
 export type { IUniswapV3Factory } from "./IUniswapV3Factory";
 export type { ProtocolReserveManager } from "./ProtocolReserveManager";
+export type { ProtocolReserveManagerV2 } from "./ProtocolReserveManagerV2";
 export type { SubgraphManager } from "./SubgraphManager";
 export type { TestToken } from "./TestToken";
 
@@ -90,7 +90,6 @@ export { DeterminationContract__factory } from "./factories/DeterminationContrac
 export { GovernorContract__factory } from "./factories/GovernorContract__factory";
 export { TimeLock__factory } from "./factories/TimeLock__factory";
 export { GovernanceToken__factory } from "./factories/GovernanceToken__factory";
-export { IProtocolReserveManager__factory } from "./factories/IProtocolReserveManager__factory";
 export { IPoolManager__factory } from "./factories/IPoolManager__factory";
 export { PoolManager__factory } from "./factories/PoolManager__factory";
 export { PoolToken__factory } from "./factories/PoolToken__factory";
@@ -98,5 +97,6 @@ export { IGovernorContract__factory } from "./factories/IGovernorContract__facto
 export { IPoolManagerStandard__factory } from "./factories/IPoolManagerStandard__factory";
 export { IUniswapV3Factory__factory } from "./factories/IUniswapV3Factory__factory";
 export { ProtocolReserveManager__factory } from "./factories/ProtocolReserveManager__factory";
+export { ProtocolReserveManagerV2__factory } from "./factories/ProtocolReserveManagerV2__factory";
 export { SubgraphManager__factory } from "./factories/SubgraphManager__factory";
 export { TestToken__factory } from "./factories/TestToken__factory";

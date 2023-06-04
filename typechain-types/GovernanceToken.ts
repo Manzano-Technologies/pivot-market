@@ -33,7 +33,6 @@ export interface GovernanceTokenInterface extends utils.Interface {
   contractName: "GovernanceToken";
   functions: {
     "DOMAIN_SEPARATOR()": FunctionFragment;
-    "_isContract(address)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -43,17 +42,17 @@ export interface GovernanceTokenInterface extends utils.Interface {
     "delegate(address)": FunctionFragment;
     "delegateBySig(address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
     "delegates(address)": FunctionFragment;
-    "deployReserveContract(address)": FunctionFragment;
     "getPastTotalSupply(uint256)": FunctionFragment;
     "getPastVotes(address,uint256)": FunctionFragment;
     "getVotes(address)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
+    "initialSupply()": FunctionFragment;
     "name()": FunctionFragment;
     "nonces(address)": FunctionFragment;
     "numCheckpoints(address)": FunctionFragment;
     "permit(address,address,uint256,uint256,uint8,bytes32,bytes32)": FunctionFragment;
     "reserveContract()": FunctionFragment;
-    "s_maxSupply()": FunctionFragment;
+    "setReserveContract(address)": FunctionFragment;
     "symbol()": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transfer(address,uint256)": FunctionFragment;
@@ -64,7 +63,6 @@ export interface GovernanceTokenInterface extends utils.Interface {
     functionFragment: "DOMAIN_SEPARATOR",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "_isContract", values: [string]): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -97,10 +95,6 @@ export interface GovernanceTokenInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "delegates", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "deployReserveContract",
-    values: [string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getPastTotalSupply",
     values: [BigNumberish]
   ): string;
@@ -112,6 +106,10 @@ export interface GovernanceTokenInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "increaseAllowance",
     values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "initialSupply",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "nonces", values: [string]): string;
@@ -136,8 +134,8 @@ export interface GovernanceTokenInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "s_maxSupply",
-    values?: undefined
+    functionFragment: "setReserveContract",
+    values: [string]
   ): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(
@@ -155,10 +153,6 @@ export interface GovernanceTokenInterface extends utils.Interface {
 
   decodeFunctionResult(
     functionFragment: "DOMAIN_SEPARATOR",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "_isContract",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
@@ -180,10 +174,6 @@ export interface GovernanceTokenInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "delegates", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "deployReserveContract",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "getPastTotalSupply",
     data: BytesLike
   ): Result;
@@ -194,6 +184,10 @@ export interface GovernanceTokenInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "getVotes", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "increaseAllowance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "initialSupply",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
@@ -208,7 +202,7 @@ export interface GovernanceTokenInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "s_maxSupply",
+    functionFragment: "setReserveContract",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
@@ -226,14 +220,12 @@ export interface GovernanceTokenInterface extends utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "DelegateChanged(address,address,address)": EventFragment;
     "DelegateVotesChanged(address,uint256,uint256)": EventFragment;
-    "ReserveContractDeployed(address)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DelegateChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "DelegateVotesChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ReserveContractDeployed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -258,14 +250,6 @@ export type DelegateVotesChangedEvent = TypedEvent<
 
 export type DelegateVotesChangedEventFilter =
   TypedEventFilter<DelegateVotesChangedEvent>;
-
-export type ReserveContractDeployedEvent = TypedEvent<
-  [string],
-  { contractAddress: string }
->;
-
-export type ReserveContractDeployedEventFilter =
-  TypedEventFilter<ReserveContractDeployedEvent>;
 
 export type TransferEvent = TypedEvent<
   [string, string, BigNumber],
@@ -303,11 +287,6 @@ export interface GovernanceToken extends BaseContract {
 
   functions: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<[string]>;
-
-    _isContract(
-      _a: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     allowance(
       owner: string,
@@ -354,11 +333,6 @@ export interface GovernanceToken extends BaseContract {
 
     delegates(account: string, overrides?: CallOverrides): Promise<[string]>;
 
-    deployReserveContract(
-      governorAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -377,6 +351,8 @@ export interface GovernanceToken extends BaseContract {
       addedValue: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    initialSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -400,7 +376,10 @@ export interface GovernanceToken extends BaseContract {
 
     reserveContract(overrides?: CallOverrides): Promise<[string]>;
 
-    s_maxSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
+    setReserveContract(
+      reserveContractAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -421,11 +400,6 @@ export interface GovernanceToken extends BaseContract {
   };
 
   DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
-
-  _isContract(
-    _a: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   allowance(
     owner: string,
@@ -472,11 +446,6 @@ export interface GovernanceToken extends BaseContract {
 
   delegates(account: string, overrides?: CallOverrides): Promise<string>;
 
-  deployReserveContract(
-    governorAddress: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   getPastTotalSupply(
     blockNumber: BigNumberish,
     overrides?: CallOverrides
@@ -495,6 +464,8 @@ export interface GovernanceToken extends BaseContract {
     addedValue: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  initialSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -515,7 +486,10 @@ export interface GovernanceToken extends BaseContract {
 
   reserveContract(overrides?: CallOverrides): Promise<string>;
 
-  s_maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
+  setReserveContract(
+    reserveContractAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -536,8 +510,6 @@ export interface GovernanceToken extends BaseContract {
 
   callStatic: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<string>;
-
-    _isContract(_a: string, overrides?: CallOverrides): Promise<boolean>;
 
     allowance(
       owner: string,
@@ -581,11 +553,6 @@ export interface GovernanceToken extends BaseContract {
 
     delegates(account: string, overrides?: CallOverrides): Promise<string>;
 
-    deployReserveContract(
-      governorAddress: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -604,6 +571,8 @@ export interface GovernanceToken extends BaseContract {
       addedValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    initialSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -624,7 +593,10 @@ export interface GovernanceToken extends BaseContract {
 
     reserveContract(overrides?: CallOverrides): Promise<string>;
 
-    s_maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
+    setReserveContract(
+      reserveContractAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -678,13 +650,6 @@ export interface GovernanceToken extends BaseContract {
       newBalance?: null
     ): DelegateVotesChangedEventFilter;
 
-    "ReserveContractDeployed(address)"(
-      contractAddress?: null
-    ): ReserveContractDeployedEventFilter;
-    ReserveContractDeployed(
-      contractAddress?: null
-    ): ReserveContractDeployedEventFilter;
-
     "Transfer(address,address,uint256)"(
       from?: string | null,
       to?: string | null,
@@ -699,11 +664,6 @@ export interface GovernanceToken extends BaseContract {
 
   estimateGas: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
-    _isContract(
-      _a: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
 
     allowance(
       owner: string,
@@ -750,11 +710,6 @@ export interface GovernanceToken extends BaseContract {
 
     delegates(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    deployReserveContract(
-      governorAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -773,6 +728,8 @@ export interface GovernanceToken extends BaseContract {
       addedValue: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    initialSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -796,7 +753,10 @@ export interface GovernanceToken extends BaseContract {
 
     reserveContract(overrides?: CallOverrides): Promise<BigNumber>;
 
-    s_maxSupply(overrides?: CallOverrides): Promise<BigNumber>;
+    setReserveContract(
+      reserveContractAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -818,11 +778,6 @@ export interface GovernanceToken extends BaseContract {
 
   populateTransaction: {
     DOMAIN_SEPARATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    _isContract(
-      _a: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
 
     allowance(
       owner: string,
@@ -875,11 +830,6 @@ export interface GovernanceToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    deployReserveContract(
-      governorAddress: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     getPastTotalSupply(
       blockNumber: BigNumberish,
       overrides?: CallOverrides
@@ -901,6 +851,8 @@ export interface GovernanceToken extends BaseContract {
       addedValue: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    initialSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -927,7 +879,10 @@ export interface GovernanceToken extends BaseContract {
 
     reserveContract(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    s_maxSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    setReserveContract(
+      reserveContractAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

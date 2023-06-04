@@ -33,6 +33,7 @@ export interface PoolManagerInterface extends utils.Interface {
     "initializePoolTokens(address,uint256)": FunctionFragment;
     "latestSubgraphTimeseries(address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
+    "pTokenAddress()": FunctionFragment;
     "percent(uint256,uint256,uint256)": FunctionFragment;
     "pivotDeposit()": FunctionFragment;
     "pivotWithdraw()": FunctionFragment;
@@ -45,7 +46,6 @@ export interface PoolManagerInterface extends utils.Interface {
     "simulateInterestGained(uint256)": FunctionFragment;
     "simulateUserDeposit(uint256)": FunctionFragment;
     "simulatedPositionBalance()": FunctionFragment;
-    "supportsInterface(bytes4)": FunctionFragment;
     "title()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "userDeposit(uint256)": FunctionFragment;
@@ -100,6 +100,10 @@ export interface PoolManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "pTokenAddress",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "percent",
     values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
@@ -146,10 +150,6 @@ export interface PoolManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "simulatedPositionBalance",
     values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "supportsInterface",
-    values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "title", values?: undefined): string;
   encodeFunctionData(
@@ -215,6 +215,10 @@ export interface PoolManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "pTokenAddress",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "percent", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pivotDeposit",
@@ -258,10 +262,6 @@ export interface PoolManagerInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "simulatedPositionBalance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "title", data: BytesLike): Result;
@@ -395,6 +395,8 @@ export interface PoolManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    pTokenAddress(overrides?: CallOverrides): Promise<[string]>;
+
     percent(
       numerator: BigNumberish,
       denominator: BigNumberish,
@@ -443,11 +445,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<ContractTransaction>;
 
     simulatedPositionBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
 
     title(overrides?: CallOverrides): Promise<[string]>;
 
@@ -521,6 +518,8 @@ export interface PoolManager extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  pTokenAddress(overrides?: CallOverrides): Promise<string>;
+
   percent(
     numerator: BigNumberish,
     denominator: BigNumberish,
@@ -569,11 +568,6 @@ export interface PoolManager extends BaseContract {
   ): Promise<ContractTransaction>;
 
   simulatedPositionBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-  supportsInterface(
-    interfaceId: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
 
   title(overrides?: CallOverrides): Promise<string>;
 
@@ -640,6 +634,8 @@ export interface PoolManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    pTokenAddress(overrides?: CallOverrides): Promise<string>;
+
     percent(
       numerator: BigNumberish,
       denominator: BigNumberish,
@@ -682,11 +678,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<void>;
 
     simulatedPositionBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
 
     title(overrides?: CallOverrides): Promise<string>;
 
@@ -775,6 +766,8 @@ export interface PoolManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    pTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
     percent(
       numerator: BigNumberish,
       denominator: BigNumberish,
@@ -823,11 +816,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<BigNumber>;
 
     simulatedPositionBalance(overrides?: CallOverrides): Promise<BigNumber>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     title(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -905,6 +893,8 @@ export interface PoolManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    pTokenAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     percent(
       numerator: BigNumberish,
       denominator: BigNumberish,
@@ -955,11 +945,6 @@ export interface PoolManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     simulatedPositionBalance(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    supportsInterface(
-      interfaceId: BytesLike,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

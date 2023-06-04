@@ -11,8 +11,6 @@ import "./GovernanceToken.sol";
 import "./PoolManager.sol";
 import "./governance_standard/GovernorContract.sol";
 
-
-
 interface IUniswapV3Factory {
     function getPool(address,address,uint24) external view returns (address);
 }
@@ -27,19 +25,18 @@ interface IPoolManagerStandard {
     function title() external view returns (bytes32);
 }
 
-contract ProtocolReserveManager is Ownable {
+contract ProtocolReserveManager {
 
     address governorContract;
 
     //protocolToken is the token that when held accumulates protocol revenue for the holder
     address public protocolToken;
 
-    address addressWETH = address(0xEe01c0CD76354C383B8c7B4e65EA88D00B06f36f);
+    address constant addressWETH = address(0xEe01c0CD76354C383B8c7B4e65EA88D00B06f36f);
 //    address addressWETH = address(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
-    IERC20 tokenWETH = IERC20(addressWETH);
 
-    uint256 collectionNonce = 0;
+    uint256 collectionNonce;
 
     mapping(address => uint256) public revenueAvailableByUser;
 
@@ -55,7 +52,7 @@ contract ProtocolReserveManager is Ownable {
 
     event PoolContractDeployed(address contractAddress);
 
-    constructor(address token, address governorAddress) {
+    function initialize(address token, address governorAddress) external {
         cummulativeReserveFactor[0] = 0;
         protocolToken = token;
         governorContract = governorAddress;
@@ -203,7 +200,6 @@ contract ProtocolReserveManager is Ownable {
         acctProtocolRevenueCalculation(msg.sender);
 
         //TESTING TAKES BALANCE OF INPUT REV TOKEN, IN PRODUCTION SHOULD BE WETH
-        //require(tokenWETH.balanceOf(address(this)) >= amount, "Insufficient balance");
         require(IERC20(revenueToken).balanceOf(address(this)) >= amount, "Insufficient balance1");
         
         require(revenueAvailableByUser[msg.sender] >= amount, "Insufficient balance2");
