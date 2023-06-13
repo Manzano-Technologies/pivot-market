@@ -4,8 +4,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract TestToken is ERC20 {
 
-    constructor(address sender) ERC20("Pool", "POO") {
-        _mint(sender, 3000 * 10 ** decimals());
+    constructor() ERC20("DEPO TOKEN", "DEP") {
+        _mint(msg.sender, 3000 * 10 ** decimals());
     }
 
     function mint(address to, uint amt) public {

@@ -21,13 +21,16 @@ export interface SubgraphManagerInterface extends utils.Interface {
   contractName: "SubgraphManager";
   functions: {
     "approveSubgraph()": FunctionFragment;
+    "currentPoolBalance(address,uint256)": FunctionFragment;
     "currentPositionBalance(address)": FunctionFragment;
     "deposit(uint256,address,address,address)": FunctionFragment;
+    "depositsByPool(address)": FunctionFragment;
+    "depositsByPosition(address)": FunctionFragment;
     "disapproveSubgraph()": FunctionFragment;
     "emergencyFundWithdraw(address)": FunctionFragment;
     "getDepositAddressByPoolId(bytes32)": FunctionFragment;
     "owner()": FunctionFragment;
-    "poolBalance(address)": FunctionFragment;
+    "poolFactor(address)": FunctionFragment;
     "poolToDepositHoldingRegistry(address)": FunctionFragment;
     "protocolName()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -35,6 +38,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
     "simulateInterestGained(uint256)": FunctionFragment;
     "subgraphApproved()": FunctionFragment;
     "subgraphQueryURI()": FunctionFragment;
+    "targetFactor(address)": FunctionFragment;
     "targetVerifier(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "updateroyaltyUser(address)": FunctionFragment;
@@ -46,12 +50,24 @@ export interface SubgraphManagerInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "currentPoolBalance",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "currentPositionBalance",
     values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "deposit",
     values: [BigNumberish, string, string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositsByPool",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "depositsByPosition",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "disapproveSubgraph",
@@ -66,7 +82,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(functionFragment: "poolBalance", values: [string]): string;
+  encodeFunctionData(functionFragment: "poolFactor", values: [string]): string;
   encodeFunctionData(
     functionFragment: "poolToDepositHoldingRegistry",
     values: [string]
@@ -96,6 +112,10 @@ export interface SubgraphManagerInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "targetFactor",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "targetVerifier",
     values: [string]
   ): string;
@@ -117,10 +137,22 @@ export interface SubgraphManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "currentPoolBalance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "currentPositionBalance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "deposit", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "depositsByPool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "depositsByPosition",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "disapproveSubgraph",
     data: BytesLike
@@ -134,10 +166,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "poolBalance",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "poolFactor", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "poolToDepositHoldingRegistry",
     data: BytesLike
@@ -164,6 +193,10 @@ export interface SubgraphManagerInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "subgraphQueryURI",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "targetFactor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -236,10 +269,16 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    currentPositionBalance(
-      pool: string,
+    currentPoolBalance(
+      poolAddress: string,
+      currentPositionValue: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    ): Promise<[BigNumber] & { balance: BigNumber }>;
+
+    currentPositionBalance(
+      target: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { balance: BigNumber }>;
 
     deposit(
       amount: BigNumberish,
@@ -248,6 +287,16 @@ export interface SubgraphManager extends BaseContract {
       originalSender: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    depositsByPool(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    depositsByPosition(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
     disapproveSubgraph(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -260,12 +309,12 @@ export interface SubgraphManager extends BaseContract {
 
     getDepositAddressByPoolId(
       pivotTargetPoolId: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[string] & { depositAddress: string }>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
-    poolBalance(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+    poolFactor(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     poolToDepositHoldingRegistry(
       arg0: string,
@@ -291,6 +340,8 @@ export interface SubgraphManager extends BaseContract {
     subgraphApproved(overrides?: CallOverrides): Promise<[boolean]>;
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<[string]>;
+
+    targetFactor(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     targetVerifier(
       targetAddress: string,
@@ -319,8 +370,14 @@ export interface SubgraphManager extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  currentPoolBalance(
+    poolAddress: string,
+    currentPositionValue: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   currentPositionBalance(
-    pool: string,
+    target: string,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -331,6 +388,13 @@ export interface SubgraphManager extends BaseContract {
     originalSender: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  depositsByPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+  depositsByPosition(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   disapproveSubgraph(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -343,12 +407,12 @@ export interface SubgraphManager extends BaseContract {
 
   getDepositAddressByPoolId(
     pivotTargetPoolId: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
-  poolBalance(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+  poolFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   poolToDepositHoldingRegistry(
     arg0: string,
@@ -375,6 +439,8 @@ export interface SubgraphManager extends BaseContract {
 
   subgraphQueryURI(overrides?: CallOverrides): Promise<string>;
 
+  targetFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   targetVerifier(
     targetAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -400,8 +466,14 @@ export interface SubgraphManager extends BaseContract {
   callStatic: {
     approveSubgraph(overrides?: CallOverrides): Promise<void>;
 
+    currentPoolBalance(
+      poolAddress: string,
+      currentPositionValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     currentPositionBalance(
-      pool: string,
+      target: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -412,6 +484,13 @@ export interface SubgraphManager extends BaseContract {
       originalSender: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    depositsByPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    depositsByPosition(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     disapproveSubgraph(overrides?: CallOverrides): Promise<void>;
 
@@ -427,7 +506,7 @@ export interface SubgraphManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
-    poolBalance(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    poolFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     poolToDepositHoldingRegistry(
       arg0: string,
@@ -452,10 +531,12 @@ export interface SubgraphManager extends BaseContract {
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<string>;
 
+    targetFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     targetVerifier(
       targetAddress: string,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     transferOwnership(
       newOwner: string,
@@ -491,8 +572,14 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    currentPoolBalance(
+      poolAddress: string,
+      currentPositionValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     currentPositionBalance(
-      pool: string,
+      target: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -502,6 +589,13 @@ export interface SubgraphManager extends BaseContract {
       pivotTargetAddress: string,
       originalSender: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    depositsByPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    depositsByPosition(
+      arg0: string,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     disapproveSubgraph(
@@ -515,12 +609,12 @@ export interface SubgraphManager extends BaseContract {
 
     getDepositAddressByPoolId(
       pivotTargetPoolId: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
-    poolBalance(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    poolFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     poolToDepositHoldingRegistry(
       arg0: string,
@@ -546,6 +640,8 @@ export interface SubgraphManager extends BaseContract {
     subgraphApproved(overrides?: CallOverrides): Promise<BigNumber>;
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<BigNumber>;
+
+    targetFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     targetVerifier(
       targetAddress: string,
@@ -575,8 +671,14 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    currentPoolBalance(
+      poolAddress: string,
+      currentPositionValue: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     currentPositionBalance(
-      pool: string,
+      target: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -586,6 +688,16 @@ export interface SubgraphManager extends BaseContract {
       pivotTargetAddress: string,
       originalSender: string,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    depositsByPool(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    depositsByPosition(
+      arg0: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     disapproveSubgraph(
@@ -599,12 +711,12 @@ export interface SubgraphManager extends BaseContract {
 
     getDepositAddressByPoolId(
       pivotTargetPoolId: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    poolBalance(
+    poolFactor(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -633,6 +745,11 @@ export interface SubgraphManager extends BaseContract {
     subgraphApproved(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    targetFactor(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     targetVerifier(
       targetAddress: string,

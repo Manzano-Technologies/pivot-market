@@ -8,7 +8,7 @@ import "./ProtocolReserveManager.sol";
 /// @notice This contract is for the protocol token that gives proposal voting rights and access to protocol fees collected
 contract GovernanceToken is ERC20Votes {
     
-    // initialize the reserveContract, to be updated when reserveContract gets deployed
+    /// @dev initialize the reserveContract, to be updated when reserveContract gets deployed
     address public reserveContract = address(0);
     uint256 public initialSupply = 1000000000000000000000000;
 
@@ -20,6 +20,7 @@ contract GovernanceToken is ERC20Votes {
     /// @dev Save the contract address that handles the protocol revenues, this contract will be used in delegating fees earned to token holders
     function setReserveContract(address reserveContractAddress) external {
         require(reserveContract == address(0), "Reserve Contract Address has already been set");
+        require(reserveContractAddress != address(0), "Cannot be set to a ZERO Address");
         reserveContract = reserveContractAddress;
     }
 
@@ -27,8 +28,8 @@ contract GovernanceToken is ERC20Votes {
     function _transfer(address sender, address recipient, uint256 amount) internal virtual override {
         if (reserveContract != address(0)) {
             ProtocolReserveManager reserveManager = ProtocolReserveManager(reserveContract); 
-            reserveManager.acctProtocolRevenueCalculation(sender);
-            reserveManager.acctProtocolRevenueCalculation(recipient);
+            reserveManager.protocolRevenueCalculation(sender);
+            reserveManager.protocolRevenueCalculation(recipient);
         }
         super._transfer(sender, recipient, amount);
     }

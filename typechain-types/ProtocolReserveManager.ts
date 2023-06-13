@@ -21,27 +21,27 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   contractName: "ProtocolReserveManager";
   functions: {
     "_isContract(address)": FunctionFragment;
-    "acctProtocolRevenueCalculation(address)": FunctionFragment;
+    "addSubgraph(address)": FunctionFragment;
     "cummulativeReserveFactor(uint256)": FunctionFragment;
     "deployPoolContract(address,bytes32,uint256,address,bytes32)": FunctionFragment;
-    "deployTestToken()": FunctionFragment;
+    "displayPoolList()": FunctionFragment;
+    "displaySubgraphList()": FunctionFragment;
     "findSwapPool(address)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
+    "protocolRevenueCalculation(address)": FunctionFragment;
     "protocolToken()": FunctionFragment;
     "revenueAvailableByUser(address)": FunctionFragment;
     "titleToPool(bytes32)": FunctionFragment;
-    "transferRevenueAsWETH(address,address,uint256)": FunctionFragment;
+    "transferRevenueAsWETH(address,uint256)": FunctionFragment;
     "uniswapPoolCache(address)": FunctionFragment;
     "updateProtocolRevenueFactor(uint256)": FunctionFragment;
     "userToLastUpdateNonce(address)": FunctionFragment;
+    "viewProtocolLevelRevenue(address)": FunctionFragment;
     "withdrawRevenues(uint256,address)": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "_isContract", values: [string]): string;
-  encodeFunctionData(
-    functionFragment: "acctProtocolRevenueCalculation",
-    values: [string]
-  ): string;
+  encodeFunctionData(functionFragment: "addSubgraph", values: [string]): string;
   encodeFunctionData(
     functionFragment: "cummulativeReserveFactor",
     values: [BigNumberish]
@@ -51,7 +51,11 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     values: [string, BytesLike, BigNumberish, string, BytesLike]
   ): string;
   encodeFunctionData(
-    functionFragment: "deployTestToken",
+    functionFragment: "displayPoolList",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "displaySubgraphList",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -61,6 +65,10 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "initialize",
     values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "protocolRevenueCalculation",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "protocolToken",
@@ -76,7 +84,7 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "transferRevenueAsWETH",
-    values: [string, string, BigNumberish]
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "uniswapPoolCache",
@@ -91,6 +99,10 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     values: [string]
   ): string;
   encodeFunctionData(
+    functionFragment: "viewProtocolLevelRevenue",
+    values: [string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "withdrawRevenues",
     values: [BigNumberish, string]
   ): string;
@@ -100,7 +112,7 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "acctProtocolRevenueCalculation",
+    functionFragment: "addSubgraph",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -112,7 +124,11 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "deployTestToken",
+    functionFragment: "displayPoolList",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "displaySubgraphList",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -120,6 +136,10 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "protocolRevenueCalculation",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "protocolToken",
     data: BytesLike
@@ -149,18 +169,20 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "viewProtocolLevelRevenue",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "withdrawRevenues",
     data: BytesLike
   ): Result;
 
   events: {
     "PoolContractDeployed(address)": EventFragment;
-    "TestTokenDeployed(address)": EventFragment;
     "TokensWithdrawn(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "PoolContractDeployed"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TestTokenDeployed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TokensWithdrawn"): EventFragment;
 }
 
@@ -171,14 +193,6 @@ export type PoolContractDeployedEvent = TypedEvent<
 
 export type PoolContractDeployedEventFilter =
   TypedEventFilter<PoolContractDeployedEvent>;
-
-export type TestTokenDeployedEvent = TypedEvent<
-  [string],
-  { tokenAddress: string }
->;
-
-export type TestTokenDeployedEventFilter =
-  TypedEventFilter<TestTokenDeployedEvent>;
 
 export type TokensWithdrawnEvent = TypedEvent<
   [string, string, BigNumber],
@@ -220,8 +234,8 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    acctProtocolRevenueCalculation(
-      user: string,
+    addSubgraph(
+      subgraphAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -239,9 +253,9 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    deployTestToken(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    displayPoolList(overrides?: CallOverrides): Promise<[string[]]>;
+
+    displaySubgraphList(overrides?: CallOverrides): Promise<[string[]]>;
 
     findSwapPool(
       token: string,
@@ -249,8 +263,13 @@ export interface ProtocolReserveManager extends BaseContract {
     ): Promise<ContractTransaction>;
 
     initialize(
-      token: string,
+      tokenAddress: string,
       governorAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    protocolRevenueCalculation(
+      user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -264,7 +283,6 @@ export interface ProtocolReserveManager extends BaseContract {
     titleToPool(arg0: BytesLike, overrides?: CallOverrides): Promise<[string]>;
 
     transferRevenueAsWETH(
-      pool: string,
       revenueToken: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -285,6 +303,11 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
+    viewProtocolLevelRevenue(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { availableRevenue: BigNumber }>;
+
     withdrawRevenues(
       amount: BigNumberish,
       revenueToken: string,
@@ -297,8 +320,8 @@ export interface ProtocolReserveManager extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  acctProtocolRevenueCalculation(
-    user: string,
+  addSubgraph(
+    subgraphAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -316,9 +339,9 @@ export interface ProtocolReserveManager extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  deployTestToken(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  displayPoolList(overrides?: CallOverrides): Promise<string[]>;
+
+  displaySubgraphList(overrides?: CallOverrides): Promise<string[]>;
 
   findSwapPool(
     token: string,
@@ -326,8 +349,13 @@ export interface ProtocolReserveManager extends BaseContract {
   ): Promise<ContractTransaction>;
 
   initialize(
-    token: string,
+    tokenAddress: string,
     governorAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  protocolRevenueCalculation(
+    user: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -341,7 +369,6 @@ export interface ProtocolReserveManager extends BaseContract {
   titleToPool(arg0: BytesLike, overrides?: CallOverrides): Promise<string>;
 
   transferRevenueAsWETH(
-    pool: string,
     revenueToken: string,
     amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -359,6 +386,11 @@ export interface ProtocolReserveManager extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
+  viewProtocolLevelRevenue(
+    user: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   withdrawRevenues(
     amount: BigNumberish,
     revenueToken: string,
@@ -368,10 +400,10 @@ export interface ProtocolReserveManager extends BaseContract {
   callStatic: {
     _isContract(_a: string, overrides?: CallOverrides): Promise<boolean>;
 
-    acctProtocolRevenueCalculation(
-      user: string,
+    addSubgraph(
+      subgraphAddress: string,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<void>;
 
     cummulativeReserveFactor(
       arg0: BigNumberish,
@@ -387,15 +419,22 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    deployTestToken(overrides?: CallOverrides): Promise<void>;
+    displayPoolList(overrides?: CallOverrides): Promise<string[]>;
+
+    displaySubgraphList(overrides?: CallOverrides): Promise<string[]>;
 
     findSwapPool(token: string, overrides?: CallOverrides): Promise<string>;
 
     initialize(
-      token: string,
+      tokenAddress: string,
       governorAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    protocolRevenueCalculation(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     protocolToken(overrides?: CallOverrides): Promise<string>;
 
@@ -407,7 +446,6 @@ export interface ProtocolReserveManager extends BaseContract {
     titleToPool(arg0: BytesLike, overrides?: CallOverrides): Promise<string>;
 
     transferRevenueAsWETH(
-      pool: string,
       revenueToken: string,
       amount: BigNumberish,
       overrides?: CallOverrides
@@ -425,6 +463,11 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    viewProtocolLevelRevenue(
+      user: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     withdrawRevenues(
       amount: BigNumberish,
       revenueToken: string,
@@ -439,11 +482,6 @@ export interface ProtocolReserveManager extends BaseContract {
     PoolContractDeployed(
       contractAddress?: null
     ): PoolContractDeployedEventFilter;
-
-    "TestTokenDeployed(address)"(
-      tokenAddress?: null
-    ): TestTokenDeployedEventFilter;
-    TestTokenDeployed(tokenAddress?: null): TestTokenDeployedEventFilter;
 
     "TokensWithdrawn(address,address,uint256)"(
       token?: string | null,
@@ -463,8 +501,8 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    acctProtocolRevenueCalculation(
-      user: string,
+    addSubgraph(
+      subgraphAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -482,9 +520,9 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    deployTestToken(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    displayPoolList(overrides?: CallOverrides): Promise<BigNumber>;
+
+    displaySubgraphList(overrides?: CallOverrides): Promise<BigNumber>;
 
     findSwapPool(
       token: string,
@@ -492,8 +530,13 @@ export interface ProtocolReserveManager extends BaseContract {
     ): Promise<BigNumber>;
 
     initialize(
-      token: string,
+      tokenAddress: string,
       governorAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    protocolRevenueCalculation(
+      user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -507,7 +550,6 @@ export interface ProtocolReserveManager extends BaseContract {
     titleToPool(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
 
     transferRevenueAsWETH(
-      pool: string,
       revenueToken: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -525,6 +567,11 @@ export interface ProtocolReserveManager extends BaseContract {
 
     userToLastUpdateNonce(
       arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    viewProtocolLevelRevenue(
+      user: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -541,8 +588,8 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    acctProtocolRevenueCalculation(
-      user: string,
+    addSubgraph(
+      subgraphAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -560,8 +607,10 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    deployTestToken(
-      overrides?: Overrides & { from?: string | Promise<string> }
+    displayPoolList(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    displaySubgraphList(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     findSwapPool(
@@ -570,8 +619,13 @@ export interface ProtocolReserveManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     initialize(
-      token: string,
+      tokenAddress: string,
       governorAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    protocolRevenueCalculation(
+      user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -588,7 +642,6 @@ export interface ProtocolReserveManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     transferRevenueAsWETH(
-      pool: string,
       revenueToken: string,
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -606,6 +659,11 @@ export interface ProtocolReserveManager extends BaseContract {
 
     userToLastUpdateNonce(
       arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    viewProtocolLevelRevenue(
+      user: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
