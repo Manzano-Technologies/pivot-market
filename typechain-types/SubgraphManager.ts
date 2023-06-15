@@ -30,6 +30,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
     "emergencyFundWithdraw(address)": FunctionFragment;
     "getDepositAddressByPoolId(bytes32)": FunctionFragment;
     "owner()": FunctionFragment;
+    "percent(uint256,uint256,uint256)": FunctionFragment;
     "poolFactor(address)": FunctionFragment;
     "poolToDepositHoldingRegistry(address)": FunctionFragment;
     "protocolName()": FunctionFragment;
@@ -82,6 +83,10 @@ export interface SubgraphManagerInterface extends utils.Interface {
     values: [BytesLike]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "percent",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
   encodeFunctionData(functionFragment: "poolFactor", values: [string]): string;
   encodeFunctionData(
     functionFragment: "poolToDepositHoldingRegistry",
@@ -166,6 +171,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "percent", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "poolFactor", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "poolToDepositHoldingRegistry",
@@ -314,6 +320,13 @@ export interface SubgraphManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    percent(
+      numerator: BigNumberish,
+      denominator: BigNumberish,
+      precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { quotient: BigNumber }>;
+
     poolFactor(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     poolToDepositHoldingRegistry(
@@ -412,6 +425,13 @@ export interface SubgraphManager extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  percent(
+    numerator: BigNumberish,
+    denominator: BigNumberish,
+    precision: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   poolFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   poolToDepositHoldingRegistry(
@@ -505,6 +525,13 @@ export interface SubgraphManager extends BaseContract {
     ): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
+
+    percent(
+      numerator: BigNumberish,
+      denominator: BigNumberish,
+      precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     poolFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -614,6 +641,13 @@ export interface SubgraphManager extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    percent(
+      numerator: BigNumberish,
+      denominator: BigNumberish,
+      precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     poolFactor(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     poolToDepositHoldingRegistry(
@@ -715,6 +749,13 @@ export interface SubgraphManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    percent(
+      numerator: BigNumberish,
+      denominator: BigNumberish,
+      precision: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     poolFactor(
       arg0: string,

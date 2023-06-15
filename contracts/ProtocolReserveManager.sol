@@ -14,7 +14,7 @@ interface IGovernorContract {
 /// @notice This contract is for handling protocol level revenues and managing pools
 contract ProtocolReserveManager {
 
-    address originalDeployer;
+    address public originalDeployer;
 
     address governorContract;
 

@@ -28,6 +28,7 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     "displaySubgraphList()": FunctionFragment;
     "findSwapPool(address)": FunctionFragment;
     "initialize(address,address)": FunctionFragment;
+    "originalDeployer()": FunctionFragment;
     "protocolRevenueCalculation(address)": FunctionFragment;
     "protocolToken()": FunctionFragment;
     "revenueAvailableByUser(address)": FunctionFragment;
@@ -65,6 +66,10 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "initialize",
     values: [string, string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "originalDeployer",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "protocolRevenueCalculation",
@@ -136,6 +141,10 @@ export interface ProtocolReserveManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "originalDeployer",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "protocolRevenueCalculation",
     data: BytesLike
@@ -268,6 +277,8 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    originalDeployer(overrides?: CallOverrides): Promise<[string]>;
+
     protocolRevenueCalculation(
       user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -354,6 +365,8 @@ export interface ProtocolReserveManager extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  originalDeployer(overrides?: CallOverrides): Promise<string>;
+
   protocolRevenueCalculation(
     user: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -430,6 +443,8 @@ export interface ProtocolReserveManager extends BaseContract {
       governorAddress: string,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    originalDeployer(overrides?: CallOverrides): Promise<string>;
 
     protocolRevenueCalculation(
       user: string,
@@ -535,6 +550,8 @@ export interface ProtocolReserveManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    originalDeployer(overrides?: CallOverrides): Promise<BigNumber>;
+
     protocolRevenueCalculation(
       user: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -623,6 +640,8 @@ export interface ProtocolReserveManager extends BaseContract {
       governorAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    originalDeployer(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     protocolRevenueCalculation(
       user: string,

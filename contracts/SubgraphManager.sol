@@ -42,7 +42,6 @@ contract SubgraphManager is Ownable {
     constructor(bytes32 protocol, address reserveContract) {
         royaltyUser = address(msg.sender);
         protocolName = protocol;
-        ProtocolReserveManager(reserveContract).addSubgraph(msg.sender);
     }
 
     /// @dev Updates the royalty user address.
@@ -72,10 +71,8 @@ contract SubgraphManager is Ownable {
     function updatePoolBalance(address pool, uint poolBalanceBeforeUpdate, uint amount, bool isDecrease) internal {
         if (isDecrease == true) {
             depositsByPool[pool] = poolBalanceBeforeUpdate - amount;
-            simulatedPositionBalance[pool] = poolBalanceBeforeUpdate - amount;
         } else {
             depositsByPool[pool] = poolBalanceBeforeUpdate + amount;
-            simulatedPositionBalance[pool] = poolBalanceBeforeUpdate + amount;
         }
     }
 
@@ -87,8 +84,10 @@ contract SubgraphManager is Ownable {
     function updatePositionBalance(address positionTargetAddress, uint positionBalanceBeforeUpdate, uint amount, bool isDecrease) internal {
         if (isDecrease == true) {
             depositsByPosition[positionTargetAddress] = positionBalanceBeforeUpdate - amount;
+            simulatedPositionBalance[positionTargetAddress] = positionBalanceBeforeUpdate - amount;
         } else {
-            depositsByPosition[positionTargetAddress] += positionBalanceBeforeUpdate - amount;
+            depositsByPosition[positionTargetAddress] = positionBalanceBeforeUpdate + amount;
+            simulatedPositionBalance[positionTargetAddress] = positionBalanceBeforeUpdate + amount;
         }
     }
 
@@ -114,8 +113,13 @@ contract SubgraphManager is Ownable {
         uint positionValue = currentPositionValue;
         if (positionValue <= 0) {
             positionValue = currentPositionBalance(target);
-        }        
-        uint balance = (positionValue/targetFactor[target]) * poolFactor[poolAddress];
+            if (currentPositionBalance(target) == 0) {
+                return 0;
+            } 
+        }
+        
+        uint ratio = percent(positionValue, targetFactor[target], 4);
+        uint balance = (ratio * poolFactor[poolAddress]) / 10000;
         return balance;
     }
 
@@ -265,4 +269,14 @@ contract SubgraphManager is Ownable {
         // This function calls some function on the contract at PARENT_ADDRESS to verify a target address
     }
 
+    /// @notice Calculates the percentage of a number relative to another number.
+    /// @param numerator The numerator of the fraction.
+    /// @param denominator The denominator of the fraction.
+    /// @param precision The precision of the percentage calculation.
+    /// @return quotient The calculated percentage.
+    function percent(uint numerator, uint denominator, uint precision) public view returns(uint quotient) {
+		uint _numerator  = numerator * 10 ** (precision+1);
+		uint _quotient =  ((_numerator / denominator) + 5) / 10;
+		return ( _quotient);
+	}
 }

@@ -295,16 +295,8 @@ contract PoolManager is Ownable, IPoolManager {
     function userWithdraw(uint amount) public {
         require(amount > 0, "Withdraw Request must be greater than 0");
         require(determinationContractAddress != address(0), "This pool has not set a determination contract.");
-        uint currentPositionBalance = SubgraphManager(currentTargetSubgraphAddress).currentPositionBalance(address(this));
-        require(currentPositionBalance > 0, "Position has no assets");
-	    uint ratio = percent(amount, currentPositionBalance, 13);
-		uint pTokensToBurn = (ratio * IERC20(pTokenAddress).totalSupply()) / (10000000000000);
-		uint senderBalancePToken = IERC20(pTokenAddress).balanceOf(msg.sender);
-		
-        uint digitToRound = pTokensToBurn - ((pTokensToBurn/10) * 10);
-		if (digitToRound >= 5 && pTokensToBurn != senderBalancePToken) {
-			pTokensToBurn += 1;
-		}
+        uint senderBalancePToken = IERC20(pTokenAddress).balanceOf(msg.sender);
+        uint pTokensToBurn = calculatePTokenBurn(amount, IERC20(pTokenAddress).totalSupply(), senderBalancePToken);
 		require(pTokensToBurn <= senderBalancePToken, "Withdraw amount greater than principal + interest owed to sender");
 		uint applicableProfit = 0;
 		uint protocolFeeIncrease = 0;
@@ -347,6 +339,34 @@ contract PoolManager is Ownable, IPoolManager {
         if (pTokensToBurn <= senderBalancePToken) {
             pTokenContract.burnFrom(msg.sender, pTokensToBurn);
         }
+    }
+
+    /// @notice This function is called by the front end to measure approval before token burn
+    /// @param depositTokenAmount The amount of depositTokens being taken out of the pool
+    /// @param tokenSupply The totalSupply of the token
+    /// @param userBalance The balance of tokens that the user has, used to verify the calculation doesnt over estimate the number of tokens to burn
+    /// @return The amount of tokens to burn
+    function calculatePTokenBurn(uint depositTokenAmount, uint tokenSupply, uint userBalance) public view returns (uint) {
+        uint tokenTotalSupply = tokenSupply;
+        if (tokenTotalSupply == 0) {
+            tokenTotalSupply = IERC20(pTokenAddress).totalSupply();
+        }
+        uint userBal = userBalance;
+        if (userBal == 0) {
+            userBal = IERC20(pTokenAddress).balanceOf(msg.sender);
+        }
+        uint currentPoolBalance = SubgraphManager(currentTargetSubgraphAddress).currentPoolBalance(address(this), 0);
+        uint amt = depositTokenAmount;
+        if (depositTokenAmount == 0) {
+            amt = userBal; 
+        }
+	    uint ratio = percent(amt, currentPoolBalance, 13);
+        uint pTokensToBurn = (ratio * tokenSupply) / (10000000000000);
+        uint digitToRound = pTokensToBurn - ((pTokensToBurn/10) * 10);
+		if (digitToRound >= 5 && pTokensToBurn != userBalance) {
+			pTokensToBurn += 1;
+		}
+        return pTokensToBurn;
     }
 
     /// @notice Performs fee transfers before making a pivot deposit

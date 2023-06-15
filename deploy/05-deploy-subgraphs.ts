@@ -32,6 +32,9 @@ const deployReserveManagerContract: DeployFunction = async function (hre: Hardha
 
     fs.writeFileSync("addr.txt", JSON.stringify(json))
 
+    const reserveContract = await ethers.getContractAt("ProtocolReserveManager", reserveAddress);
+    await reserveContract.addSubgraph(reserveAddress)
+
 }
 
 export default deployReserveManagerContract;

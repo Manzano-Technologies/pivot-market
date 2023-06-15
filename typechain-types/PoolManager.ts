@@ -24,6 +24,7 @@ export interface PoolManagerInterface extends utils.Interface {
     "approvePool()": FunctionFragment;
     "approvedSubgraphPivotTarget()": FunctionFragment;
     "bonusPayout()": FunctionFragment;
+    "calculatePTokenBurn(uint256,uint256,uint256)": FunctionFragment;
     "currentTargetSubgraphAddress()": FunctionFragment;
     "depositTokenAddress()": FunctionFragment;
     "deposited()": FunctionFragment;
@@ -71,6 +72,10 @@ export interface PoolManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "bonusPayout",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "calculatePTokenBurn",
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "currentTargetSubgraphAddress",
@@ -198,6 +203,10 @@ export interface PoolManagerInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "bonusPayout",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "calculatePTokenBurn",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -374,6 +383,13 @@ export interface PoolManager extends BaseContract {
 
     bonusPayout(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    calculatePTokenBurn(
+      depositTokenAmount: BigNumberish,
+      tokenSupply: BigNumberish,
+      userBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<[string]>;
 
     depositTokenAddress(overrides?: CallOverrides): Promise<[string]>;
@@ -519,6 +535,13 @@ export interface PoolManager extends BaseContract {
 
   bonusPayout(overrides?: CallOverrides): Promise<BigNumber>;
 
+  calculatePTokenBurn(
+    depositTokenAmount: BigNumberish,
+    tokenSupply: BigNumberish,
+    userBalance: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<string>;
 
   depositTokenAddress(overrides?: CallOverrides): Promise<string>;
@@ -658,6 +681,13 @@ export interface PoolManager extends BaseContract {
     approvedSubgraphPivotTarget(overrides?: CallOverrides): Promise<string>;
 
     bonusPayout(overrides?: CallOverrides): Promise<BigNumber>;
+
+    calculatePTokenBurn(
+      depositTokenAmount: BigNumberish,
+      tokenSupply: BigNumberish,
+      userBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -805,6 +835,13 @@ export interface PoolManager extends BaseContract {
 
     bonusPayout(overrides?: CallOverrides): Promise<BigNumber>;
 
+    calculatePTokenBurn(
+      depositTokenAmount: BigNumberish,
+      tokenSupply: BigNumberish,
+      userBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     depositTokenAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -930,6 +967,13 @@ export interface PoolManager extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     bonusPayout(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    calculatePTokenBurn(
+      depositTokenAmount: BigNumberish,
+      tokenSupply: BigNumberish,
+      userBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     currentTargetSubgraphAddress(
       overrides?: CallOverrides
