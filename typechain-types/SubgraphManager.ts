@@ -21,7 +21,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
   contractName: "SubgraphManager";
   functions: {
     "approveSubgraph()": FunctionFragment;
-    "currentPoolBalance(address,uint256)": FunctionFragment;
+    "currentPoolBalance(address)": FunctionFragment;
     "currentPositionBalance(address)": FunctionFragment;
     "deposit(uint256,address,address,address)": FunctionFragment;
     "depositsByPool(address)": FunctionFragment;
@@ -37,6 +37,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
     "renounceOwnership()": FunctionFragment;
     "setSubgraphQueryURI(bytes32)": FunctionFragment;
     "simulateInterestGained(uint256)": FunctionFragment;
+    "simulatedPositionBalance(address)": FunctionFragment;
     "subgraphApproved()": FunctionFragment;
     "subgraphQueryURI()": FunctionFragment;
     "targetFactor(address)": FunctionFragment;
@@ -52,7 +53,7 @@ export interface SubgraphManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "currentPoolBalance",
-    values: [string, BigNumberish]
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "currentPositionBalance",
@@ -107,6 +108,10 @@ export interface SubgraphManagerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "simulateInterestGained",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "simulatedPositionBalance",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "subgraphApproved",
@@ -194,6 +199,10 @@ export interface SubgraphManagerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "simulatedPositionBalance",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "subgraphApproved",
     data: BytesLike
   ): Result;
@@ -277,7 +286,6 @@ export interface SubgraphManager extends BaseContract {
 
     currentPoolBalance(
       poolAddress: string,
-      currentPositionValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { balance: BigNumber }>;
 
@@ -350,6 +358,11 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    simulatedPositionBalance(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     subgraphApproved(overrides?: CallOverrides): Promise<[boolean]>;
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<[string]>;
@@ -385,7 +398,6 @@ export interface SubgraphManager extends BaseContract {
 
   currentPoolBalance(
     poolAddress: string,
-    currentPositionValue: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
@@ -455,6 +467,11 @@ export interface SubgraphManager extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  simulatedPositionBalance(
+    arg0: string,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   subgraphApproved(overrides?: CallOverrides): Promise<boolean>;
 
   subgraphQueryURI(overrides?: CallOverrides): Promise<string>;
@@ -488,7 +505,6 @@ export interface SubgraphManager extends BaseContract {
 
     currentPoolBalance(
       poolAddress: string,
-      currentPositionValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -554,6 +570,11 @@ export interface SubgraphManager extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    simulatedPositionBalance(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     subgraphApproved(overrides?: CallOverrides): Promise<boolean>;
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<string>;
@@ -601,7 +622,6 @@ export interface SubgraphManager extends BaseContract {
 
     currentPoolBalance(
       poolAddress: string,
-      currentPositionValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -671,6 +691,11 @@ export interface SubgraphManager extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    simulatedPositionBalance(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     subgraphApproved(overrides?: CallOverrides): Promise<BigNumber>;
 
     subgraphQueryURI(overrides?: CallOverrides): Promise<BigNumber>;
@@ -707,7 +732,6 @@ export interface SubgraphManager extends BaseContract {
 
     currentPoolBalance(
       poolAddress: string,
-      currentPositionValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -781,6 +805,11 @@ export interface SubgraphManager extends BaseContract {
     simulateInterestGained(
       amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    simulatedPositionBalance(
+      arg0: string,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     subgraphApproved(overrides?: CallOverrides): Promise<PopulatedTransaction>;

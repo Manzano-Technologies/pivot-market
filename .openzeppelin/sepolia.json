@@ -59,6 +59,181 @@
       "address": "0x06e69da34D321530E97667b05d8B1adF69CCC4ce",
       "txHash": "0x1fbee030a5795b14c7241dba77792170374cb7db29987f5c4cff01f090ab983a",
       "kind": "transparent"
+    },
+    {
+      "address": "0xe6d56023B962791d0971De412F58ad3C4C9df450",
+      "txHash": "0x703dd5dbefbe048a88e183570fa83983b7c3230392c4a87c90c4abec040061a2",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x9587923Baf5fc89d38D8AFd3473ffe10350903C2",
+      "txHash": "0x6323d04151e46df825beac22409a2bdee79dfa8688fb1bdece744899ca5e7a9e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5BcE0Fed84B5311aF0Ed88aeBEC4aFEDA42d5cb2",
+      "txHash": "0x58f366f34e67b8f06401f7fccf90053fc43ece04e27f0ad85390e637abe66ea1",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x9dC8ce2Fa4d089157108013BBB9E67084df48027",
+      "txHash": "0xeec64ff1f6b61e0df335c4c945daa846a42ca109918f7c09bf031cb339996e55",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xf88E7A6Cb4553c718e7151735c654Db44b5bF6b4",
+      "txHash": "0x5cdb0f420caca707b82e5d02cf62e44849aaf1af3e033e1adcdc12be2bf34109",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA141C70FF656AA02F83FA7b623f584a87C6D3c5d",
+      "txHash": "0x869418af1b7ceb4ecedf0a59029cbae9d6f3fe17af947dbfd3be10de26fc6588",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xe70f97eA6AEf094659aE6E38F7315bE271a998d5",
+      "txHash": "0x783f3e0838b2a2005943a3767c3571e6110d951ddbb0838e14737b9a30feeb68",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xb029BadB2C222E7FBf18D95AEa2ceC483A2a289D",
+      "txHash": "0x94afeac77131cea9d74abc85b3ce87a9c85b6c7ea81f68646157dc70cb72d560",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xf143627086Ed687205672AAA6C2d992770b4F3c2",
+      "txHash": "0xe6d09107ca5c7811d81c17749ea1294a296c3d0e47f9a1bcb7863fc26f33a162",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA9AE04f7bA906a7a48e0fa8DfAB4dCe202Ceb224",
+      "txHash": "0x59f29ff9aa111888e3903845ba629616940b6d2433b84e54b49fcad33931cf4d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xF6EA6729C93e901Fb26c5158926B5Ae2f05A77A1",
+      "txHash": "0x6a63aecbaa9b2b3eb0ab049b4d49dc71b93e81f944a361b1ee26bb352aee0a68",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x30484774c62D327C8EecD73376d15DC6533E4990",
+      "txHash": "0x5f6084f40f49cea32f341c4586d24b797a163dd21678cadc022c7341ba77e96c",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x837F088289674Db5175610d858CB54C6f6107244",
+      "txHash": "0x7cf4c156faf16dd7089c3b65e8bc2c8364892e503a789ba56d72ce0e1ea807d4",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x0ae5b82fC1d0466219dd70A2f9027D46cb962AD9",
+      "txHash": "0x42896fda06e9592e22f1d4882a053bbb442b6d01ca0599ce15ba5afda8d35123",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x99A30F681E50163aBb8F741ccDe4AeBfe6c3CED2",
+      "txHash": "0x085df8c89ca3c4ba086849730a9647de085dabb471f2fccee1b3b26057e1db4d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x169f5f7AeD3782D9778495ae149eD8213F0D0dDc",
+      "txHash": "0xd75e417b510d56e102e1b17ab7322d0f85375c2b4c56c519dd4b2308c5a89b78",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x1C2cc96aae3F78751F20CaF1F7eB225F02c066BF",
+      "txHash": "0xe3213ee744f8dcd2dab513af5dd8e8273571c504279f88ca1121ad24100eaed0",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xD6B7Dcc20F74fA81545eA4d2C551083211C5b5B4",
+      "txHash": "0x23033c3bbc58ec48fe3d6aede038d9aca55cb21bf325be29a34a8f0a4d8d6fd2",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4AF84bc178aB8FdE0E69Da0Ee9bCf105059C23aA",
+      "txHash": "0xf849f1299cc849f96b0e0eb2dbfd9cf35a226f6e27178213f592d9ff97f2191a",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x128E504F017f6d7556E6a692e7b5D0bf3d739901",
+      "txHash": "0xa072312dbae420d68446316dfec5543f0d896331978c357b321bd78cb4d6cca0",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x01eCDe642908b81F7a634067aA26c66E1A4c8c6B",
+      "txHash": "0xe52f1097efb7778a72d4b1450b233250575e82369d766fb0c576ed9b955831f1",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xB09480Bb5Ae3AdA6e9F02b47C9A6430203DEbac3",
+      "txHash": "0x913da6440227f62ef11dbbeddd3fb0aebdc70985fb080e7353f9fbbcd9ffac77",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x00114799569596d2B5EBf1E9B6dB1B3483647d31",
+      "txHash": "0xb6c78d174cb4e12700c2d93f1ce6ab4bfbd524ce8d4974a1c9ad8c70f226ff0c",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x94adaDe1b74836b7a6Bd034111c7a5D67CC4fD72",
+      "txHash": "0xfb19b657e53976ae4b5a4582a539c698dc825c0849b065f7587d382251561c74",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4Fcb2cef6025E5186518d1a0739D818232eC454f",
+      "txHash": "0xee4134754653ffb3aa9b78967feba64d46ae07ae6d5cec5feba456aa595acdf1",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5D971396Ec892fea2b29C54Ea44B61df73e47616",
+      "txHash": "0xd7156f23e275695f5905c0ee2e366a5e3c9bafa35240964de29a6bc5a55740d6",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xE5d8efb44807C7927623F9CFC9Efc3bD5DF80089",
+      "txHash": "0x6050b7b0f49463fb914a95c697a20295aeefe9c1c4368b9c59e6961e808d6e40",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x5A43aD337Cc15ef7654aa3AE9B5D114A15d4af4C",
+      "txHash": "0xc29623936b105388de1484aaaa538beb41181dbdc6368146851856fadb860e2f",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xBbdBB1180bD16F5B3bb18906E074B6B715413c94",
+      "txHash": "0x8dc2f2f4a41761efb86ac6dadba1ac045574e2d8d7c3b8248caebab5e62f517e",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x393B088fa543A26D4035F2295e1F0B37f6f7C2D4",
+      "txHash": "0x5143b80bd9ab5d579b2a1a100229f7cc5705a1bbabdf2e98a8558f7d7ba785f3",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xA665cA178e1589E30b30A711aa2CB481Db1444b0",
+      "txHash": "0x92942801004b5a3bc4da67f8eaa0e371f889d5767b7fb59251be77fbd0f07f8a",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x0e3A1EC25DfC8e4A92cb7e3F272c94D949b232Ff",
+      "txHash": "0x2f1a217f8fb8fc51daeb5a5daa551de058ae2b9241602a3e1165478d581a796d",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x9b347d22272d88a75cB127086BFdeeA3D8Af6c04",
+      "txHash": "0xbf6858bd5731a843c56d679c04480293c695cb484d770695cf1a2bc0393f5745",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x11dE906276F03193FE33671cEf9A838e5D8d36b1",
+      "txHash": "0x6313757e5b626349665074d597ab1044163611712c4440f4b27fcb954bd7232c",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xB01123115c68170bbE1540026e3c69AD7F9779e4",
+      "txHash": "0x8ca85b5e94598438999006c8d1c781487fff03b10b22fdf9f9d2d5ed1495afe3",
+      "kind": "transparent"
     }
   ],
   "impls": {
@@ -941,6 +1116,1840 @@
             "type": "t_array(t_address)dyn_storage",
             "contract": "ProtocolReserveManager",
             "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "4cbf87d30da41b69f4fd110e8f9ea1cbf0eaac68d674bd0cc21a81cd80479e25": {
+      "address": "0x66617d78f5AD10d2e5C5Adc92aAE008718579773",
+      "txHash": "0xe535dccbf5a060c639a35e163e76095e3651dcdcfdff024412b7a4aae476bda1",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "f6084c23807997c8475137d9f0c3f9bbdf8d1af503a21c2c7ed23626dfdd8c1d": {
+      "address": "0xeEBC1d3226f0000f321475C7fC1b36dFA42Aa423",
+      "txHash": "0x37f504237d8f08ebfc296280b46e52e953b0175adcb27588c6e8132647039641",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "84654615935383763c5ed3a8a7351be7ded2a27a577cc6f514f08e5f1b2e5e8e": {
+      "address": "0xb449E91Cb367AE33B939bc898Ae381b14f4b7B91",
+      "txHash": "0xeee47e18ae20c8cdea5d60e251cfd343a09dc86b2fcc341ba88e90e90a14fb9c",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "8e45c84fbc0853888e986c7a7eba8cd2e234506c28cb0e09b5aeda7aa889895c": {
+      "address": "0x037D9d9d954a0b166Cb842eccDA9E522e430012A",
+      "txHash": "0x3b4d726e342548a59164a13c59d8c9c2b87534ad225b64da586d1be1415e2e95",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "fc724ac0416f0b829d6ee50ebed768da585b367fb4c52bdc5f56dc598e077c8c": {
+      "address": "0x1C4E67Adfca1CDEd0E87353D8aa257f366d357d7",
+      "txHash": "0x1df30f63fd03bb4cc2fca128e62b5bbed0c0d33cb047441f0b87a527a5f8ba99",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "6b4580faf828aa3da6d1bac3d706f1bd59da241ef6e5aac44be57b5e6ece4864": {
+      "address": "0x9c75f51c0326f4f4DCdA8e2027A02f127B2d6f46",
+      "txHash": "0x9911805e94231343cd56e1d9ca7c4ddd797e9fd3ee22a46c244e4db90a40dc20",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "d881e3f611f42f0f009570f838dc97622baaeb700f80766c57c070d59b9a6c21": {
+      "address": "0xcc436A312eB1d14ad07061F014bd67580e0cDEEE",
+      "txHash": "0xde16275a06742cb23479d4e3220d372debce8f93de75fe5d96f9e9c45a6baec0",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "4cec0c7e0786d0764555ede724e2fc15b0f058df991ecbeb5017b508b5ee612b": {
+      "address": "0xae3d7da16e79CcE3cE55600B9Bc7876C14F934CA",
+      "txHash": "0xad6371a5d9c9e51ad54c225cf17b3dd1a67b5ae3b190c56b2aad6d774549e414",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "043a1c599d4b8369205407f36c4c6e93d2b1a6446dc4c259d3ba078f1b4b1023": {
+      "address": "0xb1B4A5b1Ecbe479B7B7521074A488b5256c9e464",
+      "txHash": "0x1c98c114af4bd376d0a91fbdd09fc1a671a02e5caff8d45145185d80ae35dc21",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "4ac96eab50c2e3494fff366c480b487ca79a472fe53338a6dbca2690fdea0bb9": {
+      "address": "0x028d554cebDA0A2199C486B20B265FbFb5fef394",
+      "txHash": "0x23f117731879d854a6fcb52873ec29e64d996ee89b4fbb7a22c726bbefc543ba",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "da6c1ee62d9212be5e886d5b1d07e5f63161152621d282cc11e497f76b59f411": {
+      "address": "0x9845860E83c0a310C29A3fd7aC8F0D39615a32A5",
+      "txHash": "0x60a208dc97fdcab661b837e5f89c168cd9eb5917231063d8ee0e0ea9dfa3992e",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "1defb6cddde98b76baec3f4fd838196abbc0489c60a844689e3bf7182f0812d2": {
+      "address": "0x7293275aD48011835020b982cFC27de5F9c6a7b8",
+      "txHash": "0x9a916beeb5ffaab3af17edc03a9791e404944e1f1c986f16de2cb1278e6e970e",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:17"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:19"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:21"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:26"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:28"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:30"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:32"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:34"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:36"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:38"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:40"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "e4281620fc0d9ced922b11a1d9145bede3974d6f5230e0d720cac318563c8cae": {
+      "address": "0x95021E482ccE2bFD7A50123Db5660eD7c9c380f1",
+      "txHash": "0x23d32f490bc7136b19cfb563b01fa54ed8afb730e71c2ceb86daa37d54fa8cee",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:16"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:18"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:20"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:25"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:27"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:29"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:31"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:33"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:35"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:37"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:39"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]",
+            "numberOfBytes": "32"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_address)": {
+            "label": "mapping(address => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_address)": {
+            "label": "mapping(bytes32 => address)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_uint256)": {
+            "label": "mapping(uint256 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        }
+      }
+    },
+    "f420e84c7ab25a239c67f1f061e5eb96b6175815e95b27d6a44f1983af0f9ec7": {
+      "address": "0x3dADf0363D63f5289Cb1B57316660372874b3c04",
+      "txHash": "0x8bfdddf424acfebec2b38bf01cb4ad93e07aacf0482eebf9c67043f8050b3e56",
+      "layout": {
+        "solcVersion": "0.8.9",
+        "storage": [
+          {
+            "label": "originalDeployer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:16"
+          },
+          {
+            "label": "governorContract",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:18"
+          },
+          {
+            "label": "protocolToken",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:20"
+          },
+          {
+            "label": "collectionNonce",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:25"
+          },
+          {
+            "label": "revenueAvailableByUser",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:27"
+          },
+          {
+            "label": "userToLastUpdateNonce",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_mapping(t_address,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:29"
+          },
+          {
+            "label": "cummulativeReserveFactor",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_mapping(t_uint256,t_uint256)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:31"
+          },
+          {
+            "label": "uniswapPoolCache",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_mapping(t_address,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:33"
+          },
+          {
+            "label": "titleToPool",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_mapping(t_bytes32,t_address)",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:35"
+          },
+          {
+            "label": "poolList",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:37"
+          },
+          {
+            "label": "subgraphList",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_array(t_address)dyn_storage",
+            "contract": "ProtocolReserveManager",
+            "src": "contracts/ProtocolReserveManager.sol:39"
           }
         ],
         "types": {

@@ -12,7 +12,6 @@ import "./ProtocolReserveManager.sol";
 /// @dev The code until the "CUSTOMIZED FUNCTIONS" marker is uniform and should remain the same across integrations with any protocol
 /// @dev The code after the "CUSTOMIZED FUNCTIONS" marker is unique to each protocol and will be audited before protocol approval
 contract SubgraphManager is Ownable {
-    
     /// @dev poolToDepositHoldingRegistry maps pools to the locaion of their deposits, if a pool currently using this subgraph's protocol (otherwise address(0))
     /// @dev As an example, on an AAVE subgraph, the deposit holding could be the DAI pool, USDC pool or WETH etc
     mapping(address => address) public poolToDepositHoldingRegistry;
@@ -106,17 +105,16 @@ contract SubgraphManager is Ownable {
     /// @dev Retrieves the current value of a pivot pool deposit including interest.
     /// @dev Get the current position value for the target and using the target factors return the value proportionate for a pool
     /// @param poolAddress The address of the pool.
-    /// @param currentPositionValue The value of all pivot pool's deposits into a specific target pool/market before update
     /// @return balance The current balance of the position for the pool including all interest and rewards.
-    function currentPoolBalance(address poolAddress, uint currentPositionValue) public view returns (uint balance) {
+    function currentPoolBalance(address poolAddress) public view returns (uint balance) {
         address target = poolToDepositHoldingRegistry[poolAddress];
-        uint positionValue = currentPositionValue;
-        if (positionValue <= 0) {
-            positionValue = currentPositionBalance(target);
-            if (currentPositionBalance(target) == 0) {
-                return 0;
-            } 
+        if (targetFactor[target] == 0) {
+            return 0;
         }
+        uint positionValue = currentPositionBalance(target);
+        if (positionValue == 0) {
+            return 0;
+        } 
         
         uint ratio = percent(positionValue, targetFactor[target], 4);
         uint balance = (ratio * poolFactor[poolAddress]) / 10000;
@@ -124,7 +122,7 @@ contract SubgraphManager is Ownable {
     }
 
     //*******TESTING************************************************************************************************
-    mapping(address => uint) simulatedPositionBalance;
+    mapping(address => uint) public simulatedPositionBalance;
     
     function simulateInterestGained(uint amount) public {
         //instantiate pool
@@ -132,7 +130,7 @@ contract SubgraphManager is Ownable {
         address poolAddress = msg.sender;
         address target = poolToDepositHoldingRegistry[poolAddress];
         uint currentPositionValue = currentPositionBalance(target);
-        uint poolBalanceBeforeUpdate = currentPoolBalance(poolAddress, currentPositionValue);
+        uint poolBalanceBeforeUpdate = currentPoolBalance(poolAddress);
         updatePoolBalance(poolAddress, poolBalanceBeforeUpdate, amount, false);
         PoolManager poolContractInstance = PoolManager(poolAddress);
 
@@ -166,7 +164,7 @@ contract SubgraphManager is Ownable {
             poolToDepositToken[poolAddress] = depositTokenAddress;
         }
         uint positionBalanceBeforeUpdate = currentPositionBalance(pivotTargetAddress);
-        uint poolBalanceBeforeUpdate = currentPoolBalance(poolAddress, positionBalanceBeforeUpdate);
+        uint poolBalanceBeforeUpdate = currentPoolBalance(poolAddress);
         require(poolToDepositToken[poolAddress] == depositTokenAddress, "Invalid depositTokenAddress passed to deposit function");
         
         uint currentTargetFactor = targetFactor[pivotTargetAddress];
@@ -201,6 +199,7 @@ contract SubgraphManager is Ownable {
     /// @param destination The address to which the tokens should be sent.
     /// @return withdrawSent A boolean indicating whether the withdraw was successful.
     function withdraw(bool isPivot, uint amount, address destination) external returns (bool withdrawSent) {
+        require(amount != 0, "Withdraw value must be above 0");
         address poolAddress = msg.sender;
         address depositTokenAddress = poolToDepositToken[poolAddress];
         address to = destination;
@@ -209,7 +208,7 @@ contract SubgraphManager is Ownable {
         }
         address targetAddress = poolToDepositHoldingRegistry[poolAddress];
         uint positionBalanceBeforeUpdate = currentPositionBalance(targetAddress);
-        uint poolBalanceBeforeUpdate = currentPoolBalance(poolAddress, positionBalanceBeforeUpdate);
+        uint poolBalanceBeforeUpdate = currentPoolBalance(poolAddress);
         uint poolDeposit = depositsByPool[poolAddress];
 
         uint currentTargetFactor = targetFactor[targetAddress];
@@ -223,7 +222,7 @@ contract SubgraphManager is Ownable {
         }
         updatePoolBalance(poolAddress, poolBalanceBeforeUpdate, amount, true);
         updatePositionBalance(targetAddress, positionBalanceBeforeUpdate, amount, true);
-        if (amount >= depositsByPool[poolAddress]) {
+        if (depositsByPool[poolAddress] <= 0) {
             updateRegistry(poolAddress, address(0));
         }
 

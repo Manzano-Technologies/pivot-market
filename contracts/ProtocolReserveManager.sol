@@ -13,7 +13,6 @@ interface IGovernorContract {
 /// @author Michael Manzano
 /// @notice This contract is for handling protocol level revenues and managing pools
 contract ProtocolReserveManager {
-
     address public originalDeployer;
 
     address governorContract;

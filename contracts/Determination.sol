@@ -6,7 +6,6 @@ pragma experimental ABIEncoderV2;
 /// @notice This contract is a template/example of logic at determines whether or not a pool should pivot its target
 /// @dev All function calls are views, the determination contract logic calculates and returns booleans as to whether or not to pivot a pool's deposits
 contract DeterminationContract {
-
     constructor() {
 
     }

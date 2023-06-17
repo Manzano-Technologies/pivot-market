@@ -17,14 +17,13 @@ interface IPoolManager {
 }
 
 contract PoolManager is Ownable, IPoolManager {
-
     event ApprovalChanged(bool isApproved);
 
     bool public poolApproved = true;
 
     /// @notice currentDepositHoldingAddress is the address where the ERC20 token deposits from this pool are currently held 
     /// @notice Example: the Compound market that is holding this pool's funds
-    address currentDepositHoldingAddress = address(this);
+    address public currentDepositHoldingAddress;
 
     /// @notice currentTargetSubgraphAddress holds the address of the subgraph contract that pertains to the protocol currently holding pool deposits
     address public currentTargetSubgraphAddress = address(0);
@@ -118,6 +117,7 @@ contract PoolManager is Ownable, IPoolManager {
     /// @param initialDepositAmount The initial deposit amount.
     function initializePoolTokens(address senderAddress, uint256 initialDepositAmount) external onlyOwner {
         require(pTokenAddress == address(0), "Pool pToken already set");
+        currentDepositHoldingAddress = address(this);
         string memory originalSymbol = ERC20(depositTokenAddress).symbol();
         bytes memory symbol = abi.encodePacked("p", originalSymbol);
         string memory titleString = string(abi.encodePacked(title));
@@ -277,8 +277,8 @@ contract PoolManager is Ownable, IPoolManager {
         deposited += amount;
 
         SubgraphManager subgraphContractInstance = SubgraphManager(currentTargetSubgraphAddress);        
-        uint currentPositionBalance = subgraphContractInstance.currentPositionBalance(address(this));
-        uint ratio = percent(amount, currentPositionBalance, 4);
+        uint currentPoolBalance = subgraphContractInstance.currentPoolBalance(address(this));
+        uint ratio = percent(amount, currentPoolBalance, 4);
 
         subgraphContractInstance.deposit(amount, depositTokenAddress, currentTargetSubgraphAddress, msg.sender);
 
@@ -296,7 +296,7 @@ contract PoolManager is Ownable, IPoolManager {
         require(amount > 0, "Withdraw Request must be greater than 0");
         require(determinationContractAddress != address(0), "This pool has not set a determination contract.");
         uint senderBalancePToken = IERC20(pTokenAddress).balanceOf(msg.sender);
-        uint pTokensToBurn = calculatePTokenBurn(amount, IERC20(pTokenAddress).totalSupply(), senderBalancePToken);
+        uint pTokensToBurn = calculatePTokenBurn(amount);
 		require(pTokensToBurn <= senderBalancePToken, "Withdraw amount greater than principal + interest owed to sender");
 		uint applicableProfit = 0;
 		uint protocolFeeIncrease = 0;
@@ -329,12 +329,13 @@ contract PoolManager is Ownable, IPoolManager {
         } else {
             deposited = 0;
         }
-
         bool userWithdrawSuccess = subgraphContractInstance.withdraw(false, amountToUser, msg.sender);
         require(userWithdrawSuccess == true, "subgraph withdraw to user failed!");
         uint feeAmount = (amount - amountToUser);
-        bool feeTransferSuccess = subgraphContractInstance.withdraw(false, feeAmount , address(this));
-        require(feeTransferSuccess == true, "subgraph fee transfer failed");
+        if (feeAmount > 0) {
+            bool feeTransferSuccess = subgraphContractInstance.withdraw(false, feeAmount , address(this));
+            require(feeTransferSuccess == true, "subgraph fee transfer failed");
+        }
 		PoolToken pTokenContract = PoolToken(pTokenAddress);
         if (pTokensToBurn <= senderBalancePToken) {
             pTokenContract.burnFrom(msg.sender, pTokensToBurn);
@@ -343,27 +344,23 @@ contract PoolManager is Ownable, IPoolManager {
 
     /// @notice This function is called by the front end to measure approval before token burn
     /// @param depositTokenAmount The amount of depositTokens being taken out of the pool
-    /// @param tokenSupply The totalSupply of the token
-    /// @param userBalance The balance of tokens that the user has, used to verify the calculation doesnt over estimate the number of tokens to burn
     /// @return The amount of tokens to burn
-    function calculatePTokenBurn(uint depositTokenAmount, uint tokenSupply, uint userBalance) public view returns (uint) {
-        uint tokenTotalSupply = tokenSupply;
-        if (tokenTotalSupply == 0) {
-            tokenTotalSupply = IERC20(pTokenAddress).totalSupply();
-        }
-        uint userBal = userBalance;
-        if (userBal == 0) {
-            userBal = IERC20(pTokenAddress).balanceOf(msg.sender);
-        }
-        uint currentPoolBalance = SubgraphManager(currentTargetSubgraphAddress).currentPoolBalance(address(this), 0);
-        uint amt = depositTokenAmount;
+    function calculatePTokenBurn(uint depositTokenAmount) public view returns (uint) {
+        //tokenSupply must be pTokenSupply
+        uint tokenTotalSupply = IERC20(pTokenAddress).totalSupply();
+
+        uint userBal = IERC20(pTokenAddress).balanceOf(msg.sender);
+        require(userBal >= 0, "Tx sender does not have any pTokens");
+        uint currentPoolBalance = SubgraphManager(currentTargetSubgraphAddress).currentPoolBalance(address(this));
+        
         if (depositTokenAmount == 0) {
-            amt = userBal; 
+            return 0; 
         }
-	    uint ratio = percent(amt, currentPoolBalance, 13);
-        uint pTokensToBurn = (ratio * tokenSupply) / (10000000000000);
+        require(currentPoolBalance >= depositTokenAmount, "Amount to burn cannot be greater than pool balance");
+	    uint ratio = percent(depositTokenAmount, currentPoolBalance, 13);
+        uint pTokensToBurn = (ratio * tokenTotalSupply) / (10000000000000);
         uint digitToRound = pTokensToBurn - ((pTokensToBurn/10) * 10);
-		if (digitToRound >= 5 && pTokensToBurn != userBalance) {
+		if (digitToRound >= 5 && pTokensToBurn != userBal) {
 			pTokensToBurn += 1;
 		}
         return pTokensToBurn;

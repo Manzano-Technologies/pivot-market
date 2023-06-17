@@ -24,7 +24,8 @@ export interface PoolManagerInterface extends utils.Interface {
     "approvePool()": FunctionFragment;
     "approvedSubgraphPivotTarget()": FunctionFragment;
     "bonusPayout()": FunctionFragment;
-    "calculatePTokenBurn(uint256,uint256,uint256)": FunctionFragment;
+    "calculatePTokenBurn(uint256)": FunctionFragment;
+    "currentDepositHoldingAddress()": FunctionFragment;
     "currentTargetSubgraphAddress()": FunctionFragment;
     "depositTokenAddress()": FunctionFragment;
     "deposited()": FunctionFragment;
@@ -75,7 +76,11 @@ export interface PoolManagerInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "calculatePTokenBurn",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "currentDepositHoldingAddress",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "currentTargetSubgraphAddress",
@@ -207,6 +212,10 @@ export interface PoolManagerInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "calculatePTokenBurn",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "currentDepositHoldingAddress",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -385,10 +394,10 @@ export interface PoolManager extends BaseContract {
 
     calculatePTokenBurn(
       depositTokenAmount: BigNumberish,
-      tokenSupply: BigNumberish,
-      userBalance: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    currentDepositHoldingAddress(overrides?: CallOverrides): Promise<[string]>;
 
     currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<[string]>;
 
@@ -537,10 +546,10 @@ export interface PoolManager extends BaseContract {
 
   calculatePTokenBurn(
     depositTokenAmount: BigNumberish,
-    tokenSupply: BigNumberish,
-    userBalance: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  currentDepositHoldingAddress(overrides?: CallOverrides): Promise<string>;
 
   currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -684,10 +693,10 @@ export interface PoolManager extends BaseContract {
 
     calculatePTokenBurn(
       depositTokenAmount: BigNumberish,
-      tokenSupply: BigNumberish,
-      userBalance: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    currentDepositHoldingAddress(overrides?: CallOverrides): Promise<string>;
 
     currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -837,10 +846,10 @@ export interface PoolManager extends BaseContract {
 
     calculatePTokenBurn(
       depositTokenAmount: BigNumberish,
-      tokenSupply: BigNumberish,
-      userBalance: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    currentDepositHoldingAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
     currentTargetSubgraphAddress(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -970,8 +979,10 @@ export interface PoolManager extends BaseContract {
 
     calculatePTokenBurn(
       depositTokenAmount: BigNumberish,
-      tokenSupply: BigNumberish,
-      userBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    currentDepositHoldingAddress(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
